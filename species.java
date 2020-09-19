@@ -146,7 +146,7 @@ class grower extends species{
 				String parameter = e.getparameter();
 				
 				if(evolutionspecies == speciesid) {
-					if(parameter == "growthrate") {
+					if("growthrate".equals(parameter)) {
 						growthrateindividual = e.getparameterincell(neighbourcell);
 					}
 				}
@@ -259,10 +259,10 @@ class grower extends species{
 				String parameter = e.getparameter();
 				
 				if(evolutionspecies == speciesid) {
-					if(parameter == "densitydependentdeath") {
+					if("densitydependentdeath".equals(parameter)) {
 						individualdesitydependentdeath = e.getparameterincell(currcell);
 					}
-					if(parameter == "backgrounddeathrate") {
+					if("backgrounddeathrate".equals(parameter)) {
 						individualbackgrounddeathrate = e.getparameterincell(currcell);
 					}
 				}
@@ -320,7 +320,7 @@ class grower extends species{
 	    	        				String parameter = e.getparameter();
 	    	        				
 	    	        				if(evolutionspecies == speciesid) {
-	    	        					if(parameter == "resourceproduction") {
+	    	        					if( "resourceproduction".equals(parameter)) {
 	    	        						//System.out.println("currcell" + currcell);
 	    	        						individualresourceproduction = e.getparameterincell(currcell);
 	    	        					}
@@ -392,16 +392,16 @@ class predator extends species{
 				
 				species preyspecies = cells[currcell].getspeciesvalue();
 				int preyspeciesid = preyspecies.getspeciesid();
-				
+                                
 				if(evolutionspecies == speciesid) {
-					if(parameter == "growthrate") {
+					if("growthrate".equals(parameter)) {
 						growthrateindividual = e.getparameterincell(neighbourcell);
-					}else if(parameter == "evolvingparameter") {
+					}else if("evolvingparameter".equals(parameter)) {
 						checkevolutionparameter = 1;
 						evolvingparameterneighbour = e.getparameterincell(neighbourcell);//parameter of predator
 					}
 				}else if (evolutionspecies == preyspeciesid) {//select evolution of prey
-					if(parameter == "evolvingparameter") {
+					if("evolvingparameter".equals(parameter)) {
 						checkevolutionparameter = 1;
 						evolvingparameterown = e.getparameterincell(currcell);
 					}
@@ -519,10 +519,10 @@ class predator extends species{
 				String parameter = e.getparameter();
 				
 				if(evolutionspecies == speciesid) {
-					if(parameter == "densitydependentdeath") {
+					if("densitydependentdeath".equals(parameter)) {
 						individualdesitydependentdeath = e.getparameterincell(currcell);
 					}
-					if(parameter == "backgrounddeathrate") {
+					if("backgrounddeathrate".equals(parameter)) {
 						individualbackgrounddeathrate = e.getparameterincell(currcell);
 					}
 				}
@@ -580,7 +580,7 @@ class predator extends species{
     	        				String parameter = e.getparameter();
     	        				
     	        				if(evolutionspecies == speciesid) {
-    	        					if(parameter == "resourceproduction") {
+    	        					if( "resourceproduction".equals(parameter)) {
     	        						//System.out.println("currcell" + currcell);
     	        						individualresourceproduction = e.getparameterincell(currcell);
     	        					}
@@ -646,7 +646,7 @@ class cooperator extends species{
 				String parameter = e.getparameter();
 				
 				if(evolutionspecies == speciesid) {
-					if(parameter == "growthrate") {
+					if("growthrate".equals(parameter)) {
 						growthrateindividual = e.getparameterincell(neighbourcell);
 					}
 				}
@@ -670,12 +670,12 @@ class cooperator extends species{
 							int neighbourspeciesid = c.getspeciesid();
 							
 							if(evolutionspecies == speciesid) {//evolution belongs to own species
-								if(parameter == "evolvingparameter") {
+								if("evolvingparameter".equals(parameter)) {
 									checkevolutionparameter = 1;
 									evolvingparameterown = e.getparameterincell(neighbourcell);//parameter of predator
 									}
 							}else if (evolutionspecies == neighbourspeciesid) {//evolution belongs to neighbouring species
-								if(parameter == "evolvingparameter") {
+								if("evolvingparameter".equals(parameter)) {
 									if(evolutionspecies == cooperateid) {//if neighbouringspecies cooperates with current species
 										checkevolutionparameter = 1;
 										evolvingparameterneighbour = e.getparameterincell(neighbourcellsarray[i]);
@@ -834,10 +834,10 @@ class cooperator extends species{
 				String parameter = e.getparameter();
 				
 				if(evolutionspecies == speciesid) {
-					if(parameter == "densitydependentdeath") {
+					if("densitydependentdeath".equals(parameter)) {
 						individualdesitydependentdeath = e.getparameterincell(currcell);
 					}
-					if(parameter == "backgrounddeathrate") {
+					if("backgrounddeathrate".equals(parameter)) {
 						individualbackgrounddeathrate = e.getparameterincell(currcell);
 					}
 				}
@@ -895,7 +895,7 @@ class cooperator extends species{
     	        				String parameter = e.getparameter();
     	        				
     	        				if(evolutionspecies == speciesid) {
-    	        					if(parameter == "resourceproduction") {
+    	        					if( "resourceproduction".equals(parameter)) {
     	        						//System.out.println("currcell" + currcell);
     	        						individualresourceproduction = e.getparameterincell(currcell);
     	        					}

@@ -766,22 +766,22 @@ public class CellularAutomaton implements Serializable{
 									int evolutionspecies = evo.getevospecies();
 									String parameter = evo.getparameter();
 									if(speciesid == evolutionspecies) {
-										if(parameter == "growthrate") {
+										if("growthrate".equals(parameter)) {
 										evo.setparameterupdate(cellnumber, selectedspecies.growthrate);
-										}else if(parameter == "densitydependentdeath") {
+										}else if("densitydependentdeath".equals(parameter)) {
 											evo.setparameterupdate(cellnumber, selectedspecies.getspeciesdensitydependentdeathe());
-										}else if(parameter == "backgrounddeathrate") {
+										}else if("backgrounddeathrate".equals(parameter)) {
 											evo.setparameterupdate(cellnumber, selectedspecies.getspeciesbackgroundbackgrounddeathrate());
-										}else if(parameter == "mutationrate") {
+										}else if("mutationrate".equals(parameter)) {
 											evo.setparameterupdate(cellnumber, evo.getmutationspeed());
-										}else if(parameter == "evolvingparameter") {
+										}else if("evolvingparameter".equals(parameter)) {
 											evo.setparameterupdate(cellnumber, selectedspecies.getspeciesevolvingparameter());
-										}else if(parameter == "lethality") {//only if virus
+										}else if("lethality".equals(parameter)) {//only if virus
 											if(selectedspecies instanceof virus) {
 												virus selectedspecies2 = (virus) selectedspecies;
 												evo.setparameterupdate(cellnumber, selectedspecies2.getlethality());
 											}
-										}else if(parameter == "resourceproduction") {
+										}else if("resourceproduction".equals(parameter)) {
 											evo.setparameterupdate(cellnumber, selectedspecies.getspeciesresourcechance());
 										}
 									}
@@ -1045,7 +1045,7 @@ public class CellularAutomaton implements Serializable{
 			//fill cells
 			xcoordinate = 1; ycoordinate = 1; int i = 0;//lines are 1 pixel wide so start on 1,1
 			for (cell item : cells) {//set all cells to species 1
-				if(draw == "species") {
+				if("species".equals(draw)) {
 					cellspecies = item.getspeciesvalue();
 					
 					if(cellspecies != null) {
@@ -1059,7 +1059,7 @@ public class CellularAutomaton implements Serializable{
 						xcoordinate = 1;
 						ycoordinate = ycoordinate + sizesquares;
 					}
-				}else if(draw == "resource") {
+				}else if("resource".equals(draw)) {
 					Color[] colorarray = new Color[10];
 					
 					int amountpercell = selectedresource.getamountpercel();
@@ -1098,7 +1098,7 @@ public class CellularAutomaton implements Serializable{
 						xcoordinate = 1;
 						ycoordinate = ycoordinate + sizesquares;
 					}
-				}else if (draw == "evolution"){
+				}else if ("evolution".equals(draw)){
 					Color[] colorarray = new Color[10];
 					
 					double amountpercell = 1;//max amount of variables
@@ -1138,7 +1138,7 @@ public class CellularAutomaton implements Serializable{
 						ycoordinate = ycoordinate + sizesquares;
 					}
 					
-				}else if(draw == "virus") {
+				}else if("virus".equals(draw)) {
 					ArrayList<Object> virusincell = item.getvirusincell();
 					
 					if(virusincell.size() != 0) {
@@ -1184,7 +1184,7 @@ public class CellularAutomaton implements Serializable{
 			//change button text
 			JButton clicked = (JButton) event.getSource();
 			String buttonText = clicked.getText();
-			if(buttonText == "run") {
+			if("run".equals(buttonText)) {
 				clicked.setText("pause");
 			}else {
 				clicked.setText("run");
@@ -1210,7 +1210,7 @@ public class CellularAutomaton implements Serializable{
 			//change button text
 			JButton clicked = (JButton) event.getSource();
 			String buttonText = clicked.getText();
-			if(buttonText == "update asynchronous") {
+			if("update asynchronous".equals(buttonText)) {
 				clicked.setText("update synchronous");
 			}else {
 				clicked.setText("update asynchronous");
@@ -1230,7 +1230,7 @@ public class CellularAutomaton implements Serializable{
 			//change button text
 			JButton clicked = (JButton) event.getSource();
 			String buttonText = clicked.getText();
-			if(buttonText == "turn diffusion on") {
+			if("turn diffusion on".equals(buttonText)) {
 				clicked.setText("turn diffusion off");
 			}else {
 				clicked.setText("turn diffusion on");
@@ -1291,7 +1291,7 @@ public class CellularAutomaton implements Serializable{
 				newspecies.addListSelectionListener(this);
 				
 				//add forms with textfields and buttons
-				if(selection == "grower" || selection == "predator" || selection == "cooperator" || selection == "gameoflife" || selection == "virus") {					
+				if("grower".equals(selection) || "predator".equals(selection) || "cooperator".equals(selection) || "gameoflife".equals(selection) || "virus".equals(selection)) {					
 					JLabel growthratelabel = new JLabel("growth rate: ");
 					panelsouth_east.add(growthratelabel);
 					growthratefield = new JFormattedTextField(getMaskFormatter("#.###"));
@@ -1328,21 +1328,21 @@ public class CellularAutomaton implements Serializable{
 					panelsouth_east.add(resourceproducefield);
 					
 					//specific questions per species
-					if(selection == "predator") {
+					if("predator".equals(selection)) {
 						JLabel preylabel = new JLabel("insert the id of species that this species will predate on; separate by ,");
 						panelsouth_east.add(preylabel);
 						preyfield = new JTextField();
 						panelsouth_east.add(preyfield);
 					}
 					
-					if(selection == "cooperator") {
+					if("cooperator".equals(selection)) {
 						JLabel cooperatelabel = new JLabel("insert the id of species that this species requires to propagate; separate by ,");
 						panelsouth_east.add(cooperatelabel);
 						cooperatefield = new JTextField();
 						panelsouth_east.add(cooperatefield);
 					}
 					
-					if(selection == "virus") {
+					if("virus".equals(selection)) {
 						backgrounddeathratelabel.setVisible(false);
 						backgrounddeathratefield.setVisible(false);
 						replicaterequirednumberlabel.setVisible(false);
@@ -1378,7 +1378,7 @@ public class CellularAutomaton implements Serializable{
 					panelsouth_east.add(addspecies);
 				}
 				
-				if(selection == "resource") {
+				if("resource".equals(selection)) {
 					JLabel amountnumberlabel = new JLabel("amount available per cel: ");
 					panelsouth_east.add(amountnumberlabel);
 					amountnumberfield = new JFormattedTextField(getMaskFormatter("##"));
@@ -1394,7 +1394,7 @@ public class CellularAutomaton implements Serializable{
 					panelsouth_east.add(addresource);
 				}
 				
-				if(selection == "evolution") {
+				if("evolution".equals(selection)) {
 					//add option list
 					newevolution = new JList(listoptions2);
 					newevolution.setName("evolutionlist");
@@ -1488,7 +1488,7 @@ public class CellularAutomaton implements Serializable{
 			int minimumrequirednumberint = (int) minimumrequirednumber;//convert to int
 			
 			//for every species insert new object
-			if(selection == "grower") {//add new species
+			if("grower".equals(selection)) {//add new species
 				grower newspecies = new grower();
 				
 				newspecies.setspeciesgrowthtrate(growthrate);
@@ -1543,7 +1543,7 @@ public class CellularAutomaton implements Serializable{
 				speciesarraylist.add(newspecies);
 				
 				frame.repaint();
-			}else if(selection == "predator"){
+			}else if("predator".equals(selection)){
 				predator newspecies = new predator();
 				
 				newspecies.setspeciesgrowthtrate(growthrate);
@@ -1610,7 +1610,7 @@ public class CellularAutomaton implements Serializable{
 				speciesarraylist.add(newspecies);
 				
 				frame.repaint();
-			}else if(selection == "cooperator") {
+			}else if("cooperator".equals(selection)) {
 				cooperator newspecies = new cooperator();
 				
 				newspecies.setspeciesgrowthtrate(growthrate);
@@ -1678,7 +1678,7 @@ public class CellularAutomaton implements Serializable{
 				
 				frame.repaint();
 			
-			}else if(selection == "gameoflife") {//add new species
+			}else if("gameoflife".equals(selection)) {//add new species
 				gameoflife newspecies = new gameoflife();
 				
 				newspecies.setspeciesgrowthtrate(growthrate);
@@ -1734,7 +1734,7 @@ public class CellularAutomaton implements Serializable{
 				
 				frame.repaint();
 				
-			}else if(selection == "virus"){
+			}else if("virus".equals(selection)){
 				virus newspecies = new virus();
 				
 				double lethalitynumber = (double) Double.valueOf(lethalityfield.getText());
@@ -1862,7 +1862,7 @@ public class CellularAutomaton implements Serializable{
 						newevolution.setevospecies(j);
 					}
 					
-					if(selection2 == "lethality (virus)") {
+					if("lethality (virus)".equals(selection2)) {
 						selection2 = "lethality";
 					}
 					
@@ -2104,7 +2104,7 @@ public class CellularAutomaton implements Serializable{
 			evolutionarraylist = (ArrayList<Object>) is.readObject();
 			
 			is.close();
-			
+                        
 			if(diffusion == true) {
 				diffusionbutton.setText("turn diffusion off");
 			}else {

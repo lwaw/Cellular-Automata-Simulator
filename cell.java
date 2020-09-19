@@ -169,14 +169,14 @@ public class cell implements Serializable{
 					    		        				
 					    		        				if(evolutionspecies == virusspecies) {
 					    		        					String parameter = e.getparameter();
-					    		        					if(parameter == "growthrate") {
+					    		        					if( "growthrate".equals(parameter)) {
 					    		        						virusgrowthrate = e.getparameterincell(currcell);
-					    		        					}else if(parameter == "evolvingparameter") {
+					    		        					}else if("evolvingparameter".equals(parameter)) {
 						    		        					evolvingparameter = e.getparameterincell(currcell);
 						    		        				}
 					    		        				}else if (evolutionspecies == cells[neighbourcellsarray[c]].getspeciesvalue().getspeciesid()) {//get neighbouring cell evolution parameter
 					    		        					String parameter = e.getparameter();
-					    		        					if(parameter == "evolvingparameter") {
+					    		        					if( "evolvingparameter".equals(parameter)) {
 					    		        						evolvingneighbourparameter = e.getparameterincell(neighbourcellsarray[c]);
 						    		        				}
 					    		        				}
@@ -212,7 +212,7 @@ public class cell implements Serializable{
     		        				String parameter = e.getparameter();
     		        				
     		        				if(evolutionspecies == virusspecies) {
-    		        					if(parameter == "lethality") {
+    		        					if( "lethality".equals(parameter)) {
     		        						viruslethality = e.getparameterincell(currcell);
     		        					}
     		        				}
@@ -258,14 +258,14 @@ public class cell implements Serializable{
 					    		        				
 					    		        				if(evolutionspecies == virusspecies) {
 					    		        					String parameter = e.getparameter();
-					    		        					if(parameter == "growthrate") {
+					    		        					if( "growthrate".equals(parameter)) {
 					    		        						virusgrowthrate = e.getparameterincell(currcell);
-					    		        					}else if(parameter == "evolvingparameter") {
+					    		        					}else if("evolvingparameter".equals(parameter)) {
 						    		        					evolvingparameter = e.getparameterincell(currcell);
 						    		        				}
 					    		        				}else if (evolutionspecies == cells[neighbourcellsarray[c]].getspeciesvalue().getspeciesid()) {//get neighbouring cell evolution parameter
 					    		        					String parameter = e.getparameter();
-					    		        					if(parameter == "evolvingparameter") {
+					    		        					if( "evolvingparameter".equals(parameter)) {
 					    		        						evolvingneighbourparameter = e.getparameterincell(neighbourcellsarray[c]);
 						    		        				}
 					    		        				}
@@ -301,7 +301,7 @@ public class cell implements Serializable{
     		        				String parameter = e.getparameter();
     		        				
     		        				if(evolutionspecies == virusspecies) {
-    		        					if(parameter == "lethality") {
+    		        					if( "lethality".equals(parameter)) {
     		        						viruslethality = e.getparameterincell(currcell);
     		        					}
     		        				}

@@ -95,22 +95,22 @@ public class evolution implements Serializable{
 					}
 				}
 				
-				if(parameter == "growthrate") {
+				if("growthrate".equals(parameter)) {
 					initialparameterval = cellspecies.getspeciesgrowthrate();
-				}else if(parameter == "densitydependentdeath") {
+				}else if("densitydependentdeath".equals(parameter)) {
 					initialparameterval = cellspecies.getspeciesdensitydependentdeathe();
-				}else if(parameter == "backgrounddeathrate") {
+				}else if("backgrounddeathrate".equals(parameter)) {
 					initialparameterval = cellspecies.getspeciesbackgroundbackgrounddeathrate();
-				}else if(parameter == "mutationrate") {
+				}else if("mutationrate".equals(parameter)) {
 					initialparameterval = mutationspeed;
-				}else if(parameter == "evolvingparameter") {
+				}else if("evolvingparameter".equals(parameter)) {
 					initialparameterval = cellspecies.getspeciesevolvingparameter();
-				}else if(parameter == "lethality") {
+				}else if("lethality".equals(parameter)) {
 					if(cellspecies instanceof virus) {
 						virus cellspecies2 = (virus) cellspecies;
 						initialparameterval = cellspecies2.getlethality();
 					}
-				}else if(parameter == "resourceproduction") {
+				}else if("resourceproduction".equals(parameter)) {
 					initialparameterval = cellspecies.getspeciesresourcechance();
 				}
 				
@@ -169,22 +169,22 @@ public class evolution implements Serializable{
 	
 	public void setparameterinitial(species cellspecies, int cellnumber) {//set intial parametervalue for new cells
 		double initialparameterval = 0;
-		if(parameter == "growthrate") {
+		if("growthrate".equals(parameter)) {
 			initialparameterval = cellspecies.getspeciesgrowthrate();
-		}else if(parameter == "densitydependentdeath") {
+		}else if("densitydependentdeath".equals(parameter)) {
 			initialparameterval = cellspecies.getspeciesdensitydependentdeathe();
-		}else if(parameter == "backgrounddeathrate") {
+		}else if("backgrounddeathrate".equals(parameter)) {
 			initialparameterval = cellspecies.getspeciesbackgroundbackgrounddeathrate();
-		}else if(parameter == "mutationrate") {
+		}else if("mutationrate".equals(parameter)) {
 			initialparameterval = mutationspeed;
-		}else if(parameter == "evolvingparameter") {
+		}else if("evolvingparameter".equals(parameter)) {
 			initialparameterval = cellspecies.getspeciesevolvingparameter();
-		}else if(parameter == "lethality") {
+		}else if("lethality".equals(parameter)) {
 			if(cellspecies instanceof virus) {
 				virus cellspecies2 = (virus) cellspecies;
 				initialparameterval = cellspecies2.getlethality();
 			}
-		}else if(parameter == "resourceproduction") {
+		}else if("resourceproduction".equals(parameter)) {
 			initialparameterval = cellspecies.getspeciesresourcechance();
 		}
 		
