@@ -1,4 +1,4 @@
-Download link: http://www.mediafire.com/file/wxvg2ocpwrn7cgz/CAS_1.1.zip/file
+Download link: http://www.mediafire.com/file/3p6lwkuqpzxwwdu/CAS.zip/file
 
 CAS (Cellular Automata Simulator) is a tool that allows to place
 different cellular automata on a single grid. The following cellular
@@ -99,6 +99,7 @@ empty cells will be filled randomly.
 \*All parameters when not specified are set to 0
 
 * * * * *
+Version: 1.2
 
 This project is licensed under the terms of the Creative Commons
 Attribution-ShareAlike 4.0 International Public License license.
