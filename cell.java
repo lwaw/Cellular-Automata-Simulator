@@ -123,7 +123,7 @@ public class cell implements Serializable{
 			//for(Iterator<Object> v = virusincell.iterator(); v.hasNext();) {
 				if(v instanceof virus) {
 					virus vir = (virus) v;
-					setevolution(evolutionarraylist, currcell, currcell, vir);//mutate all viruses in cell
+					//setevolution(evolutionarraylist, currcell, currcell, vir);//mutate all viruses in cell
 					
 					int incubationtime = virusincellincubationtime.get(i);
 					incubationtime--;
@@ -347,22 +347,22 @@ public class cell implements Serializable{
 		        grower s = (grower) speciesvalue;
 		    	deathrate = s.death(neighbourvaluessarraylist, cells, currcell, speciesvalue, resourceavailable, evolutionarraylist);
 		    	
-		    	setevolution(evolutionarraylist, currcell, currcell, s);
+		    	//setevolution(evolutionarraylist, currcell, currcell, s);
 		    }else if(speciesvalue instanceof predator){
 		    	predator s = (predator) speciesvalue;
 		    	deathrate = s.death(neighbourvaluessarraylist, cells, currcell, speciesvalue, resourceavailable, evolutionarraylist);
 		    	
-		    	setevolution(evolutionarraylist, currcell, currcell, s);
+		    	//setevolution(evolutionarraylist, currcell, currcell, s);
 		    }else if(speciesvalue instanceof cooperator){
 		    	cooperator s = (cooperator) speciesvalue;
 		    	deathrate = s.death(neighbourvaluessarraylist, cells, currcell, speciesvalue, resourceavailable, evolutionarraylist);
 		    	
-		    	setevolution(evolutionarraylist, currcell, currcell, s);
+		    	//setevolution(evolutionarraylist, currcell, currcell, s);
 		    }else if(speciesvalue instanceof gameoflife){
 		    	gameoflife s = (gameoflife) speciesvalue;
 		    	deathrate = s.death(neighbourvaluessarraylist, cells, currcell, speciesvalue, resourceavailable);
 		    	
-		    	setevolution(evolutionarraylist, currcell, currcell, s);
+		    	//setevolution(evolutionarraylist, currcell, currcell, s);
 		    }
 		    
 		    double deathrand = Math.random();
