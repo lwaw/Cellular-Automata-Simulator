@@ -28,8 +28,8 @@ public class CellularAutomaton implements Serializable{
 	JFormattedTextField growthratefield, densitydependentdeathfield, backgrounddeathratefield, replicaterequirednumberfield, minimumrequirednumberfield,amountnumberfield,regeneratenumberfield, mutationnumberfield, mutationspeedlabelnumberfield, incubationnumberfield, lethalityfield;
 	JTextField preyfield, resourcefield, resourceproducefield, evospeciesfield, cooperatefield, gridsizefield, infectfield;
 	String selection, selection2;
-	JPanel panelsouth, panelnorth, panelsouth_east, panelwest, panelwestcontainer;
-	JButton runbutton, onestepbutton, newspeciesbutton, resetbutton, resetgridbutton, synchronousbutton, diffusionbutton, distributerbutton, savebutton, loadbutton, gridsizebutton, infobutton;
+	JPanel panelsouth, panelnorth, panelsouth_east, panelwest, panelwestcontainer,panelsouthcontainer;
+	JButton runbutton, onestepbutton, newspeciesbutton, resetbutton, resetgridbutton, synchronousbutton, diffusionbutton, distributerbutton, savebutton, loadbutton, gridsizebutton, infobutton,changecolorbutton;
 	cell[] cells = new cell[totalgrid];
 	ArrayList<Object> speciesarraylist = new ArrayList<Object>();//list for species
 	ArrayList<Object> resourcearraylist = new ArrayList<Object>();//list for species
@@ -40,6 +40,7 @@ public class CellularAutomaton implements Serializable{
 	species selectedspecies = null;
 	resource selectedresource = null;
 	evolution selectedevolution = null;
+    String lastselectedobject = null;
 	String draw = "species";
 	
 	public static void main (String[] args) {
@@ -199,6 +200,9 @@ public class CellularAutomaton implements Serializable{
 		
 		panelsouth = new JPanel();
 		panelsouth.setBackground(Color.BLACK);
+        
+		panelsouthcontainer = new JPanel();
+		panelsouthcontainer.setBackground(Color.BLACK);
 		
 		panelnorth = new JPanel();
 		panelnorth.setBackground(Color.BLACK);
@@ -244,6 +248,10 @@ public class CellularAutomaton implements Serializable{
 		distributerbutton = new JButton("distribute random");
 		distributerbutton.addActionListener(new distributerlistener());
 		panelsouth.add(distributerbutton);
+        
+		changecolorbutton = new JButton("change color");
+		changecolorbutton.addActionListener(new changecolorlistener());
+		panelsouth.add(changecolorbutton);
 		
 		savebutton = new JButton("save");
 		savebutton.addActionListener(new savelistener());
@@ -256,7 +264,24 @@ public class CellularAutomaton implements Serializable{
 		infobutton = new JButton("info");
 		infobutton.addActionListener(new infolistener());
 		panelsouth.add(infobutton);
+        
+        //order panelsouth
+        panelsouth.setLayout(new BoxLayout(panelsouth, BoxLayout.X_AXIS));
+        
+        panelsouthcontainer.setLayout(new BoxLayout(panelsouthcontainer, BoxLayout.Y_AXIS));
+        panelsouthcontainer.add(panelsouth);
+        frame.add(BorderLayout.SOUTH, panelsouthcontainer);
+        
+        //make scrollbar if panel is too high
+        JScrollPane scroller4 = new JScrollPane(panelsouth);
+        scroller4.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        //scroller4.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scroller4.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        panelsouthcontainer.add(scroller4);
 		
+        //panelsouthcontainer.revalidate();
+        //panelsouth.revalidate();
+        
 		//add mouselistener to let users click on grid
 		MyDrawPanel drawpanel = new MyDrawPanel();	
 		drawpanel.addMouseListener(new Mouse());
@@ -833,24 +858,28 @@ public class CellularAutomaton implements Serializable{
 					        
 					        if(j == selectedpanelid) {
 					        	selectedspecies = s;
+                                lastselectedobject = "species";
 					        }
 					    }else if(o instanceof predator) {
 					    	predator s = (predator) o;
 					    	
 					        if(j == selectedpanelid) {
 					        	selectedspecies = s;
+                                lastselectedobject = "species";
 					        }
 					    }else if(o instanceof cooperator) {
 					    	cooperator s = (cooperator) o;
 					    	
 					        if(j == selectedpanelid) {
 					        	selectedspecies = s;
+                                lastselectedobject = "species";
 					        }
 						}else if(o instanceof gameoflife) {
 					    	gameoflife s = (gameoflife) o;
 					    	
 					        if(j == selectedpanelid) {
 					        	selectedspecies = s;
+                                lastselectedobject = "species";
 					        }
 					    }else if(o instanceof virus) {
 					    	virus s = (virus) o;
@@ -858,6 +887,7 @@ public class CellularAutomaton implements Serializable{
 					    	//change to virus view
 					        if(j == selectedpanelid) {
 					        	selectedspecies = s;
+                                lastselectedobject = "species";
 					        	if(draw != "virus") {
 					        		draw = "virus";
 					        	}else {
@@ -905,10 +935,12 @@ public class CellularAutomaton implements Serializable{
 					        if(j == selectedpanelid) {
 					        	if(selectedevolution != r) {//if not already selected
 					        		selectedevolution = r;
+                                    lastselectedobject = "evolution";
 					        		draw = "evolution";
 					        	}else {//else draw species
 					        		selectedevolution = null;
 					        		draw = "species";
+                                    lastselectedobject = "evolution";
 					        	}
 					        }
 					    }
@@ -953,11 +985,13 @@ public class CellularAutomaton implements Serializable{
 					        if(j == selectedpanelid) {
 					        	if(selectedresource != r) {//if not already selected
 					        		selectedresource = r;
+                                    lastselectedobject = "resource";
 					        		draw = "resource";
 					        	}else {
 					        		//panel.setBorder(null);
 					        		selectedresource = null;
 					        		draw = "species";
+                                    lastselectedobject = "resource";
 					        	}
 					        }
 					    }
@@ -1900,6 +1934,7 @@ public class CellularAutomaton implements Serializable{
 			selectedresource = null;
 			selectedevolution = null;
 			draw = "species";
+            lastselectedobject = null;
 			
 			onlypaint = true;//repaint grid
 			try {
@@ -2036,6 +2071,26 @@ public class CellularAutomaton implements Serializable{
 	}
 	
 	
+	//change color
+	class changecolorlistener implements ActionListener{//select save file
+		public void actionPerformed(ActionEvent event) {
+            if("species".equals(lastselectedobject)){
+                selectedspecies.setspeciescolor(99);
+            }else if("evolution".equals(lastselectedobject)){
+                selectedevolution.setevolutioncolor();
+            }else if("resource".equals(lastselectedobject)){
+                selectedresource.setresourcecolor();
+            }
+            frame.repaint();
+            
+			panelwest.removeAll();
+			panelwestcontainer.removeAll();
+            buildGuipanelwest();
+            panelwest.revalidate();
+			panelwestcontainer.revalidate();
+        }
+	}
+    
 	//save objects
 	class savelistener implements ActionListener{//select save file
 		public void actionPerformed(ActionEvent event) {
