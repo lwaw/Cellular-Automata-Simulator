@@ -272,22 +272,18 @@ public class CellularAutomaton implements Serializable{
         panelsouthcontainer.add(panelsouth);
         frame.add(BorderLayout.SOUTH, panelsouthcontainer);
         
-        //make scrollbar if panel is too high
+        //make scrollbar if panel is too wide
         JScrollPane scroller4 = new JScrollPane(panelsouth);
         scroller4.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        //scroller4.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scroller4.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         panelsouthcontainer.add(scroller4);
-		
-        //panelsouthcontainer.revalidate();
-        //panelsouth.revalidate();
         
 		//add mouselistener to let users click on grid
 		MyDrawPanel drawpanel = new MyDrawPanel();	
 		drawpanel.addMouseListener(new Mouse());
 		
 		frame.getContentPane().add(BorderLayout.CENTER, drawpanel);
-		frame.getContentPane().add(BorderLayout.SOUTH, panelsouth);
+        frame.getContentPane().add(BorderLayout.SOUTH, panelsouthcontainer);
 		
 		frame.getContentPane().add(BorderLayout.NORTH, panelnorth);
 		frame.setSize(screensize, screensize);
@@ -298,7 +294,7 @@ public class CellularAutomaton implements Serializable{
 	public void buildGuipanelsouth_east() {//show species info
 		
 	}
-	
+    
 	//build graphic user interface for panelwest; panel is used to show species info; this panel is clickable to let users select a species
 	public void buildGuipanelwest() {
 		int arraysize = speciesarraylist.size();//for species
@@ -1468,8 +1464,7 @@ public class CellularAutomaton implements Serializable{
 					addevolution.addActionListener(new addevolutionlistener());
 					panelsouth_east.add(addevolution);
 				}
-
-				panelsouth.revalidate();//update panel
+				panelsouthcontainer.revalidate();//update panel
 			}
 	        
 		}
@@ -1842,7 +1837,7 @@ public class CellularAutomaton implements Serializable{
 				
 				frame.repaint();
 			}
-			panelsouth.revalidate();//update panel
+			panelsouthcontainer.revalidate();//update panel
 			emptypanelwest();
 			buildGuipanelwest();//add species info to panel
 		}
@@ -1869,7 +1864,7 @@ public class CellularAutomaton implements Serializable{
 				item.setresourceavailable(amountnumberint);
 			}
 			
-			panelsouth.revalidate();//update panel
+			panelsouthcontainer.revalidate();//update panel
 			emptypanelwest();
 			buildGuipanelwest();//add species info to panel
 		}
@@ -1907,7 +1902,7 @@ public class CellularAutomaton implements Serializable{
 					newevolution.setparameterpercell(cells);//set all cells with species in evolution
 					evolutionarraylist.add(newevolution);
 				}
-				panelsouth.revalidate();//update panel
+				panelsouthcontainer.revalidate();//update panel
 				emptypanelwest();
 				buildGuipanelwest();//add species info to panel
 			}
@@ -2165,7 +2160,7 @@ public class CellularAutomaton implements Serializable{
 			}else {
 				diffusionbutton.setText("turn diffusion on");
 			}
-			panelsouth.revalidate();
+			panelsouthcontainer.revalidate();
 			
 			buildGuipanelwest();
 			
@@ -2225,7 +2220,7 @@ public class CellularAutomaton implements Serializable{
 				panelsouth_east.add(changegridsize);
 				
 			}
-			panelsouth.revalidate();
+			panelsouthcontainer.revalidate();
 		}
 	}
 	
