@@ -35,6 +35,14 @@ public class cell implements Serializable{
 	public ArrayList<Object> getvirusincell() {
 		return virusincell;
 	}
+    
+	public int getxlocation() {
+		return xlocation;
+	}
+    
+	public int getylocation() {
+		return ylocation;
+	}
 	
 	public void addincubationtime(int value) {
 		virusincellincubationtime.add(value);

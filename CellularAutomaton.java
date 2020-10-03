@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
+import java.util.Random; 
 
 import java.io.*;
 import java.text.ParseException;
@@ -77,21 +78,55 @@ public class CellularAutomaton implements Serializable{
     		//boolrun runs continuously; onesteprun only runs once
     		while(boolrun == true || onesteprun == true) {
 	    		int i = 0;
-	    		i = 0;
-	    		//check for updates in each cell; synchronous update draws all changes at the end of each cycle once while asynchronous draws on the go
-	    		for(cell item : cells) {
-	    			if(synchronous == true) {
-	    				species s = item.updatecells(gridsize, cells, i, evolutionarraylist, diffusion);//update cells user cells & i array to find neighbours
-	    				updatespeciesarraylist.add(s);
-	    			}else {
-	    				species s = item.updatecells(gridsize, cells, i, evolutionarraylist, diffusion);//update cells user cells & i array to find neighbours
-	    				item.setspeciesvalue(s);
+                Random r = new Random();
+                int xlocation, ylocation, getcellnumber;
+                ArrayList<Integer> numberofcellslist = new ArrayList<Integer>();
+                ArrayList<cell> randomnumberofcellslist = new ArrayList<cell>();
+                
+                if(synchronous == false){
+                    //create list of random cell order and update all cells in this order
+                    int x = 0;
+                    int numberofcells = cells.length;
+
+                    //create list with cell numbers
+                    while(x < numberofcells){
+                        numberofcellslist.add(x);
+                        x++;
+                    }
+                    
+                    x = 0;
+                    while(numberofcellslist.size() > 0){
+                        int randomNumberindex = r.nextInt(numberofcellslist.size()); 
+                        int randomNumber = numberofcellslist.get(randomNumberindex);
+                        
+                        randomnumberofcellslist.add(cells[randomNumber]);
+                        numberofcellslist.remove(randomNumberindex);
+                        
+                        x++;
+                    }
+                    
+                    x = 0;
+                    for(cell y : randomnumberofcellslist){
+                        xlocation = y.getxlocation();
+                        ylocation = y.getylocation();
+                        getcellnumber = ( gridsize * ylocation ) + xlocation;
+                        
+	    				species s = y.updatecells(gridsize, cells, getcellnumber, evolutionarraylist, diffusion);//update cells user cells & i array to find neighbours
+	    				y.setspeciesvalue(s);
 	    				
-	    				item.regenerateresource(resourcearraylist);//regenerate resources asynchronous
-	    			}
-	    			
-	    			i++;
-	    		}
+	    				y.regenerateresource(resourcearraylist);//regenerate resources asynchronous
+                    
+                        x++;
+                    }
+                }else{
+                    //check for updates in each cell; synchronous update draws all changes at the end of each cycle once while asynchronous draws on the go
+                    for(cell item : cells) {
+                        species s = item.updatecells(gridsize, cells, i, evolutionarraylist, diffusion);//update cells user cells & i array to find neighbours
+                        updatespeciesarraylist.add(s);
+
+                        i++;
+                    }
+                }
 	    		
 	    		//after all cells are updated draw new updated values
 	    		i = 0;
