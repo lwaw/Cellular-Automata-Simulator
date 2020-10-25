@@ -115,7 +115,7 @@ public class CellularAutomaton implements Serializable{
               species s = y.updatecells(gridsize, cells, getcellnumber, evolutionarraylist, diffusion);//update cells user cells & i array to find neighbours
               y.setspeciesvalue(s);
 
-              y.regenerateresource(resourcearraylist, gridsize, cells, x, xlocation, ylocation);//regenerate resources asynchronous
+              y.regenerateresource(resourcearraylist, gridsize, cells, getcellnumber, xlocation, ylocation);//regenerate resources asynchronous
 
               x++;
             }
@@ -174,7 +174,9 @@ public class CellularAutomaton implements Serializable{
 	    			for(cell item : cells) {
               xlocation = item.getxlocation();
               ylocation = item.getylocation();
-	    				item.regenerateresource(resourcearraylist, gridsize, cells, totalgrid, xlocation, ylocation);
+              getcellnumber = ( gridsize * ylocation ) + xlocation;
+              
+	    				item.regenerateresource(resourcearraylist, gridsize, cells, getcellnumber, xlocation, ylocation);
 	    			  i++;
             }
 	    		}
@@ -1963,6 +1965,10 @@ public class CellularAutomaton implements Serializable{
           }
 				}else if("local resource".equals(selection3)) {
           newresource = new local_resource();
+          
+          for(cell item : cells) {
+            item.setresourceavailable(0);
+          }
         }
         
         if(diffusionnumberint == 1){

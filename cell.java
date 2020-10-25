@@ -69,6 +69,10 @@ public class cell implements Serializable{
 		
 		return resourceavailableincell;
 	}
+  
+	public void setselectedresource(int id, int newvalue) {
+    resourceavailable.set(id, newvalue);
+	}
 	
 	//update resource in cell
 	public void updateresource(int resourceid, int resourcevalue) {//sets new resource value to arraylist
@@ -108,15 +112,15 @@ public class cell implements Serializable{
 		  }else if(item instanceof local_resource) {//local resource only regenerates in sources
         local_resource r = (local_resource) item;
         int source_in_cell = r.issourceinlist(this);
+        int diffusion = r.getdiffusion();
         
-        if(source_in_cell == 1){
-          int amountpercell = r.getamountpercel();
-          int regenerate = r.getregenerate();
-          int diffusion = r.getdiffusion();
-
-          int j = 0;
-          for(Integer resourceamount : resourceavailable) {//go through all resources in cell
-            if(i == j) {
+        int amountpercell = r.getamountpercel();
+        int regenerate = r.getregenerate();
+          
+        int j = 0;
+        for(Integer resourceamount : resourceavailable) {//go through all resources in cell
+          if(i == j) {
+            if(source_in_cell == 1){//only regenerate if source
               resourceamount = resourceamount + regenerate;
 
               if(resourceamount > amountpercell) {//max amount reached
@@ -124,13 +128,13 @@ public class cell implements Serializable{
               }
 
               resourceavailable.set(j, resourceamount);
-              
-              if(diffusion == 1){
-                resourcediffusion(j, r, resourceamount, resourcearraylist, gridsize, cells, currcell, xlocation, ylocation);
-              }
             }
-            j++;
+              
+            if(diffusion == 1){
+              resourcediffusion(j, r, resourceamount, resourcearraylist, gridsize, cells, currcell, xlocation, ylocation);
+            }
           }
+          j++;
         }
       }
 		  i++;
@@ -138,10 +142,49 @@ public class cell implements Serializable{
 	}
   
   public void resourcediffusion(int j, resource r, int currcell_resourceamount, ArrayList resourcearraylist, int gridsize, cell cells[], int currcell, int xlocation, int ylocation) {//sets new resource value to arraylist
-    int[] neighbours = this.getneighbours(gridsize, cells, currcell, xlocation, ylocation);
+    ArrayList<Integer> neighbourresourcesarraylist = new ArrayList<Integer>();
+    int[] neighbours = getneighbours(gridsize, cells, currcell, xlocation, ylocation);
     
+		for(int item : neighbours) {//get values of resource and put in array
+			neighbourresourcesarraylist.add(cells[item].getselectedresource(j));
+		}
     
-  
+    //select lowest neighbouring resource
+    int i = 0, lowestvalueindex = -1, lowestvalue = -1;
+    
+    for(int neighbourresource : neighbourresourcesarraylist){
+      if(lowestvalueindex < 0 || neighbourresource < lowestvalue){
+        lowestvalueindex = i;
+        lowestvalue = neighbourresource;
+      }else if(neighbourresource == lowestvalue){        
+        double rand = Math.random();
+        if(rand <= 0.5){
+          lowestvalueindex = i;
+          lowestvalue = neighbourresource;
+        }
+      }
+      i++;
+    }
+    
+    //only update if there are surrounding cells that have lower values of resource
+    if(lowestvalueindex >= 0 && lowestvalue >= 0){
+      if(currcell_resourceamount > lowestvalue){
+          //diffusion bases on difference in value between two cells
+          double diffusionparameter = 0.5;
+          int resourcediff = currcell_resourceamount - lowestvalue;
+          double resourcechange = resourcediff * diffusionparameter;
+          int resourcechangerounded = (int) Math.round(resourcechange);
+          
+          currcell_resourceamount = currcell_resourceamount - resourcechangerounded;
+          lowestvalue = lowestvalue + resourcechangerounded;
+          
+          if(currcell_resourceamount > 0){
+            int lowestneighbourid = neighbours[lowestvalueindex];
+            cells[lowestneighbourid].setselectedresource(j, lowestvalue);
+            cells[currcell].setselectedresource(j, currcell_resourceamount);
+          }
+      }
+    }
   }
 	
 	//update cell
