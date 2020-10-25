@@ -144,6 +144,8 @@ public class cell implements Serializable{
   public void resourcediffusion(int j, resource r, int currcell_resourceamount, ArrayList resourcearraylist, int gridsize, cell cells[], int currcell, int xlocation, int ylocation) {//sets new resource value to arraylist
     ArrayList<Integer> neighbourresourcesarraylist = new ArrayList<Integer>();
     int[] neighbours = getneighbours(gridsize, cells, currcell, xlocation, ylocation);
+    ArrayList<Integer> lowestneighbourindexarraylist = new ArrayList<Integer>();
+    ArrayList<Integer> lowestresourcearraylist = new ArrayList<Integer>();
     
 		for(int item : neighbours) {//get values of resource and put in array
 			neighbourresourcesarraylist.add(cells[item].getselectedresource(j));
@@ -156,14 +158,27 @@ public class cell implements Serializable{
       if(lowestvalueindex < 0 || neighbourresource < lowestvalue){
         lowestvalueindex = i;
         lowestvalue = neighbourresource;
-      }else if(neighbourresource == lowestvalue){        
-        double rand = Math.random();
-        if(rand <= 0.5){
-          lowestvalueindex = i;
-          lowestvalue = neighbourresource;
+        
+        lowestneighbourindexarraylist.clear();//new lowest value so clear list
+      }else if(neighbourresource == lowestvalue){  
+        if(lowestneighbourindexarraylist.isEmpty()){//pick first element which is current lowest value
+            lowestneighbourindexarraylist.add(lowestvalueindex);
+            lowestresourcearraylist.add(lowestvalue);
         }
+        
+        lowestneighbourindexarraylist.add(i);
+        lowestresourcearraylist.add(neighbourresource);
       }
       i++;
+    }
+    
+    //select random element from indexarraylist to get random neighbour to diffuse to
+    if(lowestneighbourindexarraylist.isEmpty() == false){
+      Random rand = new Random();
+      
+      int randomindex = rand.nextInt(lowestneighbourindexarraylist.size());
+      lowestvalueindex = lowestneighbourindexarraylist.get(randomindex);
+      lowestvalue = lowestresourcearraylist.get(randomindex);    
     }
     
     //only update if there are surrounding cells that have lower values of resource
