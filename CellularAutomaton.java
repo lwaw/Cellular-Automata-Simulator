@@ -2079,6 +2079,26 @@ public class CellularAutomaton implements Serializable{
     				e.resetparameterpercell();
     			}
 			}
+      
+      int i = 0;
+			for(Object resource : resourcearraylist) {//reset resource
+    		if(resource instanceof local_resource) {
+    		  local_resource r = (local_resource) resource;
+    			r.removeallsources();
+            
+          for(cell item : cells) {
+            item.setselectedresource(i, 0);
+          }
+    	  }else if(resource instanceof global_resource){
+          global_resource r = (global_resource) resource;
+          int amountpercell = r.getamountpercel();
+            
+          for(cell item : cells) {
+            item.setselectedresource(i, amountpercell);
+          }
+        }
+        i++;
+			}
 			
 			onlypaint = true;//repaint grid
 			try {

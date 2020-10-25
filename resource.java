@@ -77,4 +77,8 @@ class local_resource extends resource{
     
     return(inlist);
   }
+  
+	public void removeallsources() {
+    cellsarraylist.clear();
+	}
 }
