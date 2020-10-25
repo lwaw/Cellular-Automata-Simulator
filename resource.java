@@ -1,8 +1,9 @@
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class resource implements Serializable{
-	int resourceid, amountpercel = 0, regenerate = 0;
+	int resourceid, amountpercel = 0, regenerate = 0, diffusion = 0;
 	Color color;
 	
 	public int getamountpercel() {
@@ -30,6 +31,14 @@ public class resource implements Serializable{
 		resourceid = resourcecounter;
 		return resourcecounter;
 	}
+  
+	public int getdiffusion() {
+		return diffusion;
+	}
+	
+	public void setdiffusion(int value) {
+		diffusion = value;
+	}
 	
 	public Color getresourcecolor() {
 		return color;
@@ -41,4 +50,31 @@ public class resource implements Serializable{
 		int b = (int) (Math.random()*255);
 		color = new Color(r, g, b);
 	}
+}
+
+class global_resource extends resource{	
+    
+}
+
+class local_resource extends resource{	
+  ArrayList<Object> cellsarraylist = new ArrayList<Object>();//list for source cells
+
+	public void addremovesource(cell sourcecell) {
+    if(cellsarraylist.contains(sourcecell)){
+      cellsarraylist.remove(sourcecell);
+    }else{
+      cellsarraylist.add(sourcecell);
+    }
+	}
+  
+  public int issourceinlist(cell currcell){
+    int inlist;
+    if(cellsarraylist.contains(currcell)){
+        inlist = 1;
+    }else{
+        inlist = 0;
+    }
+    
+    return(inlist);
+  }
 }

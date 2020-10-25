@@ -4,7 +4,7 @@ import java.util.*;
 public class cell implements Serializable{
 	species speciesvalue;
 	int xlocation, ylocation;
-	ArrayList<Integer> resourceavailable = new ArrayList<Integer>();//list for species
+	ArrayList<Integer> resourceavailable = new ArrayList<Integer>();//list for resources
 	ArrayList<Object> virusincell = new ArrayList<Object>();//list for virusses
 	ArrayList<Integer> virusincellincubationtime = new ArrayList<Integer>();//list for virusses incubation time
 	
@@ -78,32 +78,71 @@ public class cell implements Serializable{
 	}
 	
 	//regenerate resource in cell
-	public void regenerateresource(ArrayList resourcearraylist) {//sets new resource value to arraylist
+	public void regenerateresource(ArrayList resourcearraylist, int gridsize, cell[] cells, int currcell, int xlocation, int ylocation) {//sets new resource value to arraylist
 		int i = 0;
 		for(Object item : resourcearraylist) {//go through all resources to get information.
-		    if (item instanceof resource) {
-		        resource r = (resource) item;
+		  if (item instanceof global_resource) {
+	      global_resource r = (global_resource) item;
 		    	
-		        int amountpercell = r.getamountpercel();
-		        int regenerate = r.getregenerate();
+		    int amountpercell = r.getamountpercel();
+		    int regenerate = r.getregenerate();
+        int diffusion = r.getdiffusion();
 		        
-		        int j = 0;
-				for(Integer resourceamount : resourceavailable) {//go through all resources in cell
-					if(i == j) {
-						resourceamount = resourceamount + regenerate;
+		    int j = 0;
+        for(Integer resourceamount : resourceavailable) {//go through all resources in cell
+    		  if(i == j) {
+				  	resourceamount = resourceamount + regenerate;
 						
-						if(resourceamount > amountpercell) {//max amount reached
-							resourceamount = amountpercell;
-						}
+				  	if(resourceamount > amountpercell) {//max amount reached
+				  		resourceamount = amountpercell;
+				  	}
 						
-						resourceavailable.set(j, resourceamount);
-					}
-					j++;
+				  	resourceavailable.set(j, resourceamount);
+            
+            if(diffusion == 1){
+              resourcediffusion(j, r, resourceamount, resourcearraylist, gridsize, cells, currcell, xlocation, ylocation);
+            }
+				  }
+		  	  j++;
 				}
-		    }
-		    i++;
+		  }else if(item instanceof local_resource) {//local resource only regenerates in sources
+        local_resource r = (local_resource) item;
+        int source_in_cell = r.issourceinlist(this);
+        
+        if(source_in_cell == 1){
+          int amountpercell = r.getamountpercel();
+          int regenerate = r.getregenerate();
+          int diffusion = r.getdiffusion();
+
+          int j = 0;
+          for(Integer resourceamount : resourceavailable) {//go through all resources in cell
+            if(i == j) {
+              resourceamount = resourceamount + regenerate;
+
+              if(resourceamount > amountpercell) {//max amount reached
+                resourceamount = amountpercell;
+              }
+
+              resourceavailable.set(j, resourceamount);
+              
+              if(diffusion == 1){
+                resourcediffusion(j, r, resourceamount, resourcearraylist, gridsize, cells, currcell, xlocation, ylocation);
+              }
+            }
+            j++;
+          }
+        }
+      }
+		  i++;
 		}
 	}
+  
+  public void resourcediffusion(int j, resource r, int currcell_resourceamount, ArrayList resourcearraylist, int gridsize, cell cells[], int currcell, int xlocation, int ylocation) {//sets new resource value to arraylist
+    int[] neighbours = this.getneighbours(gridsize, cells, currcell, xlocation, ylocation);
+    
+    
+  
+  }
 	
 	//update cell
 	public species updatecells(int gridsize, cell cells[], int currcell, ArrayList<Object> evolutionarraylist, boolean diffusion){//get species info of neighbours and calculate spread
@@ -316,7 +355,7 @@ public class cell implements Serializable{
     		        			}
     		        		}
     		        	}
-						
+                        
 						double rand = Math.random();
 						if(rand < viruslethality) {//cell dies because of virus
 							removevirusincell();//for asynchronous updates

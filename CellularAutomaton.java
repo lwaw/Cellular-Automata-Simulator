@@ -26,9 +26,9 @@ public class CellularAutomaton implements Serializable{
 	boolean onlypaint = false;
 	boolean synchronous = true;
 	boolean diffusion = false;
-	JFormattedTextField growthratefield, densitydependentdeathfield, backgrounddeathratefield, replicaterequirednumberfield, minimumrequirednumberfield,amountnumberfield,regeneratenumberfield, mutationnumberfield, mutationspeedlabelnumberfield, incubationnumberfield, lethalityfield;
+	JFormattedTextField growthratefield, densitydependentdeathfield, backgrounddeathratefield, replicaterequirednumberfield, minimumrequirednumberfield,amountnumberfield,regeneratenumberfield, diffusionnumberfield, mutationnumberfield, mutationspeedlabelnumberfield, incubationnumberfield, lethalityfield;
 	JTextField preyfield, resourcefield, resourceproducefield, evospeciesfield, cooperatefield, gridsizefield, infectfield;
-	String selection, selection2;
+	String selection, selection2, selection3;
 	JPanel panelsouth, panelnorth, panelsouth_east, panelwest, panelwestcontainer,panelsouthcontainer;
 	JButton runbutton, onestepbutton, newspeciesbutton, resetbutton, resetgridbutton, synchronousbutton, diffusionbutton, distributerbutton, savebutton, loadbutton, gridsizebutton, infobutton,changecolorbutton;
 	cell[] cells = new cell[totalgrid];
@@ -37,11 +37,12 @@ public class CellularAutomaton implements Serializable{
 	ArrayList<Object> evolutionarraylist = new ArrayList<Object>();//list for species
 	String[] listoptions = {"grower","predator","cooperator","gameoflife","virus","resource","evolution"};//add new species form
 	String[] listoptions2 = {"growthrate","densitydependentdeath","backgrounddeathrate","mutationrate","evolvingparameter","lethality (virus)","resourceproduction"};//add new species form
-	JPanel[] panelarray, rpanelarray, epanelarray;
+	String[] listoptions3 = {"global resource","local resource"};//add new resource form
+  JPanel[] panelarray, rpanelarray, epanelarray;
 	species selectedspecies = null;
 	resource selectedresource = null;
 	evolution selectedevolution = null;
-    String lastselectedobject = null;
+  String lastselectedobject = null;
 	String draw = "species";
 	
 	public static void main (String[] args) {
@@ -78,90 +79,90 @@ public class CellularAutomaton implements Serializable{
     		//boolrun runs continuously; onesteprun only runs once
     		while(boolrun == true || onesteprun == true) {
 	    		int i = 0;
-                Random r = new Random();
-                int xlocation, ylocation, getcellnumber;
-                ArrayList<Integer> numberofcellslist = new ArrayList<Integer>();
-                ArrayList<cell> randomnumberofcellslist = new ArrayList<cell>();
-                
-                if(synchronous == false){
-                    //create list of random cell order and update all cells in this order
-                    int x = 0;
-                    int numberofcells = cells.length;
+          Random r = new Random();
+          int xlocation, ylocation, getcellnumber;
+          ArrayList<Integer> numberofcellslist = new ArrayList<Integer>();
+          ArrayList<cell> randomnumberofcellslist = new ArrayList<cell>();
 
-                    //create list with cell numbers
-                    while(x < numberofcells){
-                        numberofcellslist.add(x);
-                        x++;
-                    }
-                    
-                    x = 0;
-                    while(numberofcellslist.size() > 0){
-                        int randomNumberindex = r.nextInt(numberofcellslist.size()); 
-                        int randomNumber = numberofcellslist.get(randomNumberindex);
-                        
-                        randomnumberofcellslist.add(cells[randomNumber]);
-                        numberofcellslist.remove(randomNumberindex);
-                        
-                        x++;
-                    }
-                    
-                    x = 0;
-                    for(cell y : randomnumberofcellslist){
-                        xlocation = y.getxlocation();
-                        ylocation = y.getylocation();
-                        getcellnumber = ( gridsize * ylocation ) + xlocation;
-                        
-	    				species s = y.updatecells(gridsize, cells, getcellnumber, evolutionarraylist, diffusion);//update cells user cells & i array to find neighbours
-	    				y.setspeciesvalue(s);
-	    				
-	    				y.regenerateresource(resourcearraylist);//regenerate resources asynchronous
-                    
-                        x++;
-                    }
-                }else{
-                    //check for updates in each cell; synchronous update draws all changes at the end of each cycle once while asynchronous draws on the go
-                    for(cell item : cells) {
-                        species s = item.updatecells(gridsize, cells, i, evolutionarraylist, diffusion);//update cells user cells & i array to find neighbours
-                        updatespeciesarraylist.add(s);
+          if(synchronous == false){
+            //create list of random cell order and update all cells in this order
+            int x = 0;
+            int numberofcells = cells.length;
 
-                        i++;
-                    }
-                }
+            //create list with cell numbers
+            while(x < numberofcells){
+              numberofcellslist.add(x);
+              x++;
+            }
+
+            x = 0;
+            while(numberofcellslist.size() > 0){
+              int randomNumberindex = r.nextInt(numberofcellslist.size()); 
+              int randomNumber = numberofcellslist.get(randomNumberindex);
+
+              randomnumberofcellslist.add(cells[randomNumber]);
+              numberofcellslist.remove(randomNumberindex);
+
+              x++;
+            }
+
+            x = 0;
+            for(cell y : randomnumberofcellslist){
+              xlocation = y.getxlocation();
+              ylocation = y.getylocation();
+              getcellnumber = ( gridsize * ylocation ) + xlocation;
+
+              species s = y.updatecells(gridsize, cells, getcellnumber, evolutionarraylist, diffusion);//update cells user cells & i array to find neighbours
+              y.setspeciesvalue(s);
+
+              y.regenerateresource(resourcearraylist, gridsize, cells, x, xlocation, ylocation);//regenerate resources asynchronous
+
+              x++;
+            }
+          }else{
+            //check for updates in each cell; synchronous update draws all changes at the end of each cycle once while asynchronous draws on the go
+            for(cell item : cells) {
+              species s = item.updatecells(gridsize, cells, i, evolutionarraylist, diffusion);//update cells user cells & i array to find neighbours
+              updatespeciesarraylist.add(s);
+
+              i++;
+            }
+          }
 	    		
 	    		//after all cells are updated draw new updated values
 	    		i = 0;
 	    		if(synchronous == true) {
 	    			for(Object o : updatespeciesarraylist){
-	    			    if (o instanceof grower) {
-	    			        grower s = (grower) o;
-	    			        cells[i].setspeciesvalue(s);
-	    			    }else if(o instanceof predator){
-	    			    	predator s = (predator) o;
-	    			    	cells[i].setspeciesvalue(s);
-	    			    }else if(o instanceof cooperator){
-	    			    	cooperator s = (cooperator) o;
-	    			    	cells[i].setspeciesvalue(s);
-	    			    }else if(o instanceof gameoflife){
-	    			    	gameoflife s = (gameoflife) o;
-	    			    	cells[i].setspeciesvalue(s);
-	    			    }else if(o == null) {
-	    			    	cells[i].setspeciesvalue(null);
+	    			  if (o instanceof grower) {
+	    			      grower s = (grower) o;
+	    			      cells[i].setspeciesvalue(s);
+	    			  }else if(o instanceof predator){
+	    			  	predator s = (predator) o;
+	    			  	cells[i].setspeciesvalue(s);
+	    			  }else if(o instanceof cooperator){
+	    			  	cooperator s = (cooperator) o;
+	    			   	cells[i].setspeciesvalue(s);
+	    			  }else if(o instanceof gameoflife){
+	    			   	gameoflife s = (gameoflife) o;
+	    			   	cells[i].setspeciesvalue(s);
+	    			  }else if(o == null) {
+	    			   	cells[i].setspeciesvalue(null);
+	    			   	
+	    			   	cells[i].removevincubationtime();//if not remove again virusses could spread while cell is already dead in synchronous updates
+	    			   	cells[i].removevirusincell();
 	    			    	
-	    			    	cells[i].removevincubationtime();//if not remove again virusses could spread while cell is already dead in synchronous updates
-	    			    	cells[i].removevirusincell();
-	    			    	
-	    		        	if(evolutionarraylist.size() != 0) {//check for evolution in parameters if dead then set to 0.0
-	    		        		for(Object evo : evolutionarraylist) {
-	    		        			if(evo instanceof evolution) {
-	    		        				evolution e = (evolution) evo;
-	    		        				int evolutionspecies = e.getevospecies();
-	    		        				String parameter = e.getparameter();
+	    		     	if(evolutionarraylist.size() != 0) {//check for evolution in parameters if dead then set to 0.0
+	    		     		for(Object evo : evolutionarraylist) {
+	    		     			if(evo instanceof evolution) {
+	    		     				evolution e = (evolution) evo;
+	    		     				int evolutionspecies = e.getevospecies();
+	    		     				String parameter = e.getparameter();
 	    		        				
-	    		        				e.setparameterupdate(i, 0.0);
-	    		        			}
-	    		        		}
-	    		        	}
-	    			    }
+	    		     				e.setparameterupdate(i, 0.0);
+	    		     			}
+	    		     		}
+	    		     	}
+	    			  }
 	    				i++;
 	    			}
 	    			updatespeciesarraylist.clear();
@@ -169,9 +170,13 @@ public class CellularAutomaton implements Serializable{
 	    		
 	    		//regenerate resource synchronous
 	    		if(synchronous == true) {
+            i = 0;
 	    			for(cell item : cells) {
-	    				item.regenerateresource(resourcearraylist);
-	    			}
+              xlocation = item.getxlocation();
+              ylocation = item.getylocation();
+	    				item.regenerateresource(resourcearraylist, gridsize, cells, totalgrid, xlocation, ylocation);
+	    			  i++;
+            }
 	    		}
 	    		stepcounter++;
 	    		
@@ -210,7 +215,7 @@ public class CellularAutomaton implements Serializable{
     }
 	
     //create two thread to do the update task and draw task simultaneously
-	public void runhelper() throws InterruptedException {	
+	  public void runhelper() throws InterruptedException {	
 		//new thread to update cells
 		if(onlypaint == false) {//not when only painting
 	        Thread updatecells = new Thread(new UpdateTask());
@@ -342,12 +347,12 @@ public class CellularAutomaton implements Serializable{
 		epanelarray = new JPanel[earraysize];
 		
 		if(arraysize != 0 || rarraysize != 0) {
-			int speciesid, resourceid, resourceregenerate, evolutionspecies, incubationtime;
+			int speciesid, resourceid, resourceregenerate, resourcediffusion, evolutionspecies, incubationtime;
 			double speciesgrowthrate, speciesdensitydependentdeathe, speciesbackgroundbackgrounddeathrate, evolutionmutation, evolutionmutationspeed, lethality;
 			String evolutionparameter;
 			Color speciescolor, resourcecolor, evolutioncolor;
 			int labelarraysize = arraysize*5;//number of labels per species
-			int rlabelarraysize = rarraysize*3;//number of labels per resource
+			int rlabelarraysize = rarraysize*4;//number of labels per resource
 			int elabelarraysize = earraysize*4;//number of labels per evolution
 				
 			//reset panel to redraw
@@ -443,6 +448,17 @@ public class CellularAutomaton implements Serializable{
 			        rlabelarray[i] = new JLabel();
 			        resourceregenerate = s.getregenerate();
 			        rlabelarray[i].setText("regenerate: " + resourceregenerate);
+			        rlabelarray[i].setForeground(resourcecolor);
+			        rpanelarray[j].add(rlabelarray[i]);
+			        i++;
+              
+			        rlabelarray[i] = new JLabel();
+			        resourcediffusion = s.getdiffusion();
+              if(resourcediffusion == 1){
+                  rlabelarray[i].setText("diffusion: TRUE");
+              }else{
+                  rlabelarray[i].setText("diffusion: FALSE");
+              }
 			        rlabelarray[i].setForeground(resourcecolor);
 			        rpanelarray[j].add(rlabelarray[i]);
 			        i++;
@@ -796,66 +812,75 @@ public class CellularAutomaton implements Serializable{
 						System.out.println(selectedevolution.getparameterincell(cellnumber));
 					}
 					
-					if(cellspecies != selectedspecies && selectedspecies != null) {//if cell is empty or not the same as selected species than change cell to new species
-						if(selectedspecies instanceof virus) {//virus can only grow on other species
-							virus selectedspeciesvirus = (virus) selectedspecies;
-							int virusincubationtime = selectedspeciesvirus.getincubationtime();
-							
-							int cellspeciesid = cellspecies.getspeciesid();
-							ArrayList<Integer> infectionlist = selectedspeciesvirus.getinfecting();
-							for(int id : infectionlist) {//if species in cell it can be infected by virus
-								if(id == cellspeciesid) {
-									cells[cellnumber].addvirusincell(selectedspecies);
-									cells[cellnumber].addincubationtime(virusincubationtime);
-								}
-							}
-						}else {//set cell to selected species
-							cells[cellnumber].setspeciesvalue(selectedspecies);
-						}
-						
-						//every evolution has array of all cells; now check if this needs to be updated
-						if(evolutionarraylist.size() != 0) {//update evolution if applicable
-							int speciesid = selectedspecies.getspeciesid();
-							for (Object o : evolutionarraylist) {//check for evolution replication parameter; if no evolution take growthrate
-								if(o instanceof evolution) {
-									evolution evo = (evolution) o;
-									int evolutionspecies = evo.getevospecies();
-									String parameter = evo.getparameter();
-									if(speciesid == evolutionspecies) {
-										if("growthrate".equals(parameter)) {
-										evo.setparameterupdate(cellnumber, selectedspecies.growthrate);
-										}else if("densitydependentdeath".equals(parameter)) {
-											evo.setparameterupdate(cellnumber, selectedspecies.getspeciesdensitydependentdeathe());
-										}else if("backgrounddeathrate".equals(parameter)) {
-											evo.setparameterupdate(cellnumber, selectedspecies.getspeciesbackgroundbackgrounddeathrate());
-										}else if("mutationrate".equals(parameter)) {
-											evo.setparameterupdate(cellnumber, evo.getmutationspeed());
-										}else if("evolvingparameter".equals(parameter)) {
-											evo.setparameterupdate(cellnumber, selectedspecies.getspeciesevolvingparameter());
-										}else if("lethality".equals(parameter)) {//only if virus
-											if(selectedspecies instanceof virus) {
-												virus selectedspecies2 = (virus) selectedspecies;
-												evo.setparameterupdate(cellnumber, selectedspecies2.getlethality());
-											}
-										}else if("resourceproduction".equals(parameter)) {
-											evo.setparameterupdate(cellnumber, selectedspecies.getspeciesresourcechance());
-										}
-									}
-								}
-							}
-						}
-					}else {//empty cell
-						cells[cellnumber].setspeciesvalue(null);
-						
-						if(evolutionarraylist.size() != 0) {//empty evolution
-							for (Object o : evolutionarraylist) {
-								if(o instanceof evolution) {
-									evolution evo = (evolution) o;
-									evo.setparameterupdate(cellnumber, 0.0);
-								}
-							}
-						}
-					}
+          if(lastselectedobject == "species"){
+            if(cellspecies != selectedspecies && selectedspecies != null) {//if cell is empty or not the same as selected species than change cell to new species
+              if(selectedspecies instanceof virus) {//virus can only grow on other species
+                virus selectedspeciesvirus = (virus) selectedspecies;
+                int virusincubationtime = selectedspeciesvirus.getincubationtime();
+
+                int cellspeciesid = cellspecies.getspeciesid();
+                ArrayList<Integer> infectionlist = selectedspeciesvirus.getinfecting();
+                for(int id : infectionlist) {//if species in cell it can be infected by virus
+                  if(id == cellspeciesid) {
+                    cells[cellnumber].addvirusincell(selectedspecies);
+                    cells[cellnumber].addincubationtime(virusincubationtime);
+                  }
+                }
+              }else {//set cell to selected species
+                cells[cellnumber].setspeciesvalue(selectedspecies);
+              }
+
+              //every evolution has array of all cells; now check if this needs to be updated
+              if(evolutionarraylist.size() != 0) {//update evolution if applicable
+                int speciesid = selectedspecies.getspeciesid();
+                for (Object o : evolutionarraylist) {//check for evolution replication parameter; if no evolution take growthrate
+                  if(o instanceof evolution) {
+                    evolution evo = (evolution) o;
+                    int evolutionspecies = evo.getevospecies();
+                    String parameter = evo.getparameter();
+                    if(speciesid == evolutionspecies) {
+                      if("growthrate".equals(parameter)) {
+                      evo.setparameterupdate(cellnumber, selectedspecies.growthrate);
+                      }else if("densitydependentdeath".equals(parameter)) {
+                        evo.setparameterupdate(cellnumber, selectedspecies.getspeciesdensitydependentdeathe());
+                      }else if("backgrounddeathrate".equals(parameter)) {
+                        evo.setparameterupdate(cellnumber, selectedspecies.getspeciesbackgroundbackgrounddeathrate());
+                      }else if("mutationrate".equals(parameter)) {
+                        evo.setparameterupdate(cellnumber, evo.getmutationspeed());
+                      }else if("evolvingparameter".equals(parameter)) {
+                        evo.setparameterupdate(cellnumber, selectedspecies.getspeciesevolvingparameter());
+                      }else if("lethality".equals(parameter)) {//only if virus
+                        if(selectedspecies instanceof virus) {
+                          virus selectedspecies2 = (virus) selectedspecies;
+                          evo.setparameterupdate(cellnumber, selectedspecies2.getlethality());
+                        }
+                      }else if("resourceproduction".equals(parameter)) {
+                        evo.setparameterupdate(cellnumber, selectedspecies.getspeciesresourcechance());
+                      }
+                    }
+                  }
+                }
+              }
+            }else {//empty cell
+              cells[cellnumber].setspeciesvalue(null);
+
+              if(evolutionarraylist.size() != 0) {//empty evolution
+                for (Object o : evolutionarraylist) {
+                  if(o instanceof evolution) {
+                    evolution evo = (evolution) o;
+                    evo.setparameterupdate(cellnumber, 0.0);
+                  }
+                }
+              }
+            }
+          }else if("resource".equals(lastselectedobject)){//add local resource source when clicked on grid
+            if(selectedresource instanceof local_resource) {
+              local_resource selectedresource_local = (local_resource) selectedresource;
+              cell cellobject = cells[cellnumber];
+              selectedresource_local.addremovesource(cellobject);
+            }
+              
+          }
 					
 					onlypaint = true;//repaint grid once
 					try {
@@ -889,51 +914,51 @@ public class CellularAutomaton implements Serializable{
 					        
 					        if(j == selectedpanelid) {
 					        	selectedspecies = s;
-                                lastselectedobject = "species";
+                    lastselectedobject = "species";
 					        }
 					    }else if(o instanceof predator) {
 					    	predator s = (predator) o;
 					    	
 					        if(j == selectedpanelid) {
 					        	selectedspecies = s;
-                                lastselectedobject = "species";
+                    lastselectedobject = "species";
 					        }
 					    }else if(o instanceof cooperator) {
 					    	cooperator s = (cooperator) o;
 					    	
 					        if(j == selectedpanelid) {
 					        	selectedspecies = s;
-                                lastselectedobject = "species";
+                    lastselectedobject = "species";
 					        }
 						}else if(o instanceof gameoflife) {
 					    	gameoflife s = (gameoflife) o;
 					    	
 					        if(j == selectedpanelid) {
 					        	selectedspecies = s;
-                                lastselectedobject = "species";
+                    lastselectedobject = "species";
 					        }
-					    }else if(o instanceof virus) {
-					    	virus s = (virus) o;
-					    	
-					    	//change to virus view
-					        if(j == selectedpanelid) {
-					        	selectedspecies = s;
-                                lastselectedobject = "species";
-					        	if(draw != "virus") {
-					        		draw = "virus";
-					        	}else {
-					        		draw = "species";
-					        	}
-					        }
-					        
-							onlypaint = true;//repaint grid once
-							try {
-								runhelper();
-							} catch (InterruptedException ev) {
-								ev.printStackTrace();
-							}
-					    }
-					    j++;
+            }else if(o instanceof virus) {
+              virus s = (virus) o;
+
+              //change to virus view
+                if(j == selectedpanelid) {
+                  selectedspecies = s;
+                  lastselectedobject = "species";
+                  if(draw != "virus") {
+                    draw = "virus";
+                  }else {
+                    draw = "species";
+                  }
+                }
+
+              onlypaint = true;//repaint grid once
+              try {
+                runhelper();
+              } catch (InterruptedException ev) {
+                ev.printStackTrace();
+              }
+            }
+            j++;
 					}
 					
 					//draw border
@@ -966,12 +991,12 @@ public class CellularAutomaton implements Serializable{
 					        if(j == selectedpanelid) {
 					        	if(selectedevolution != r) {//if not already selected
 					        		selectedevolution = r;
-                                    lastselectedobject = "evolution";
+                      lastselectedobject = "evolution";
 					        		draw = "evolution";
 					        	}else {//else draw species
 					        		selectedevolution = null;
 					        		draw = "species";
-                                    lastselectedobject = "evolution";
+                      lastselectedobject = "evolution";
 					        	}
 					        }
 					    }
@@ -1016,13 +1041,13 @@ public class CellularAutomaton implements Serializable{
 					        if(j == selectedpanelid) {
 					        	if(selectedresource != r) {//if not already selected
 					        		selectedresource = r;
-                                    lastselectedobject = "resource";
+                      lastselectedobject = "resource";
 					        		draw = "resource";
 					        	}else {
 					        		//panel.setBorder(null);
 					        		selectedresource = null;
 					        		draw = "species";
-                                    lastselectedobject = "resource";
+                      lastselectedobject = "resource";
 					        	}
 					        }
 					    }
@@ -1157,6 +1182,15 @@ public class CellularAutomaton implements Serializable{
 						g.setColor(Color.black);
 						g.fillRect(xcoordinate, ycoordinate, sizesquaresfill, sizesquaresfill);
 					}
+          
+          if(selectedresource instanceof local_resource){
+              local_resource selected_local_resource = (local_resource) selectedresource;
+              int sourcecell = selected_local_resource.issourceinlist(item);
+              if(sourcecell == 1){
+                g.setColor(Color.white);
+                g.fillRect(xcoordinate, ycoordinate, sizesquaresfill, sizesquaresfill);
+              }
+          }
 					
 					xcoordinate = xcoordinate + sizesquares;
 					if(xcoordinate >= (gridsize * sizesquares)) {//van 0 tot 99 op een rij
@@ -1311,7 +1345,7 @@ public class CellularAutomaton implements Serializable{
 	
 	//add new species
 	class newspecieslistener implements ActionListener, ListSelectionListener{//add species form
-		JList newspecies, newevolution;
+		JList newspecies, newevolution, newresource;
 		int newspeciesclick = 0;
 		
 		//show panel south_east; located on east
@@ -1444,10 +1478,34 @@ public class CellularAutomaton implements Serializable{
 				}
 				
 				if("resource".equals(selection)) {
+					newresource = new JList(listoptions3);
+					newresource.setName("resourcelist");
+            
+					JScrollPane scroller5 = new JScrollPane(newresource);
+					scroller5.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+					scroller5.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+					panelsouth_east.add(scroller5);
+					newresource.setVisibleRowCount(2);
+					newresource.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+					
+					int e = 0;
+					for(String item : listoptions3) {//automatically select item that is the same as selection to reload form when predator is choosen
+						if(item == selection3) {
+							newresource.setSelectedIndex(e);
+						}
+						e++;
+					}
+					newresource.addListSelectionListener(this);
+            
 					JLabel amountnumberlabel = new JLabel("amount available per cel: ");
 					panelsouth_east.add(amountnumberlabel);
 					amountnumberfield = new JFormattedTextField(getMaskFormatter("##"));
 					panelsouth_east.add(amountnumberfield);
+          
+          JLabel diffusionlabel = new JLabel("diffusion of resource: 0,1");
+					panelsouth_east.add(diffusionlabel);
+					diffusionnumberfield = new JFormattedTextField(getMaskFormatter("#"));
+					panelsouth_east.add(diffusionnumberfield);
 					
 					JLabel regeneratenumberlabel = new JLabel("regenerate: ");
 					panelsouth_east.add(regeneratenumberlabel);
@@ -1526,15 +1584,22 @@ public class CellularAutomaton implements Serializable{
 					System.out.println(newspecies.getName() + " , " + selection);
 				}
 				
-	            if(lse.getSource() == newevolution) {//check for scource list
-		            if((String) newevolution.getSelectedValue() != null) {
-						selection2 = (String) newevolution.getSelectedValue();
-					}
-		            System.out.println(newevolution.getMaxSelectionIndex() + " , " + selection2);
-	            }
-	            
-	            newspeciesbutton.doClick();
-	            newspeciesbutton.doClick();
+        if(lse.getSource() == newevolution) {//check for scource list
+          if((String) newevolution.getSelectedValue() != null) {
+            selection2 = (String) newevolution.getSelectedValue();
+          }
+          System.out.println(newevolution.getMaxSelectionIndex() + " , " + selection2);
+        }
+        
+        if(lse.getSource() == newresource) {//check for scource list
+          if((String) newresource.getSelectedValue() != null) {
+            selection3 = (String) newresource.getSelectedValue();
+          }
+          System.out.println(newresource.getMaxSelectionIndex() + " , " + selection3);
+        }
+
+        newspeciesbutton.doClick();
+        newspeciesbutton.doClick();
 			}
 		}
 	}
@@ -1881,27 +1946,39 @@ public class CellularAutomaton implements Serializable{
 	//add resource
 	class addresourcelistener implements ActionListener{//add resource form
 		public void actionPerformed(ActionEvent event) {
-			double amountnumber = (double) Double.valueOf(amountnumberfield.getText());
-			int amountnumberint = (int) amountnumber;//convert to int
-			double regeneratenumber = (double) Double.valueOf(regeneratenumberfield.getText());
-			int regeneratenumberint = (int) regeneratenumber;//convert to int
-			
-			resource newresource = new resource();
-			
-			newresource.setamountpercel(amountnumberint);
-			newresource.setregenerate(regeneratenumberint);
-			newresource.setresourceid(resourcecounter);
-			resourcecounter++;
-			newresource.setresourcecolor();
-			resourcearraylist.add(newresource);
-			
-			for(cell item : cells) {
-				item.setresourceavailable(amountnumberint);
-			}
-			
-			panelsouthcontainer.revalidate();//update panel
-			emptypanelwest();
-			buildGuipanelwest();//add species info to panel
+      if(selection3 != null) { 
+        double amountnumber = (double) Double.valueOf(amountnumberfield.getText());
+        int amountnumberint = (int) amountnumber;//convert to int
+        double regeneratenumber = (double) Double.valueOf(regeneratenumberfield.getText());
+        int regeneratenumberint = (int) regeneratenumber;//convert to int
+        double diffusionnumber = (double) Double.valueOf(diffusionnumberfield.getText());
+        int diffusionnumberint = (int) diffusionnumber;//convert to int
+        
+        resource newresource = new resource();
+        if("global resource".equals(selection3)) {
+          newresource = new global_resource();
+          
+          for(cell item : cells) {
+            item.setresourceavailable(amountnumberint);
+          }
+				}else if("local resource".equals(selection3)) {
+          newresource = new local_resource();
+        }
+        
+        if(diffusionnumberint == 1){
+            newresource.setdiffusion(1);
+        }
+        newresource.setamountpercel(amountnumberint);
+        newresource.setregenerate(regeneratenumberint);
+        newresource.setresourceid(resourcecounter);
+        resourcecounter++;
+        newresource.setresourcecolor();
+        resourcearraylist.add(newresource);
+
+        panelsouthcontainer.revalidate();//update panel
+        emptypanelwest();
+        buildGuipanelwest();//add species info to panel
+      }
 		}
 	}
 	
@@ -1964,7 +2041,7 @@ public class CellularAutomaton implements Serializable{
 			selectedresource = null;
 			selectedevolution = null;
 			draw = "species";
-            lastselectedobject = null;
+      lastselectedobject = null;
 			
 			onlypaint = true;//repaint grid
 			try {
