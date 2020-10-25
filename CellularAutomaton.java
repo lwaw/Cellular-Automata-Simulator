@@ -1176,7 +1176,7 @@ public class CellularAutomaton implements Serializable{
           }
 					
 					resourceavailable = item.getselectedresource(resourceid);//get resource amount
-					
+          
 					if(resourceavailable != 0) {//only paint if cell resource is not empty
 						int ncolordeviation = (int) (resourceavailable - halfamountpercell);//determine half the max amount
 						int ntimescolorchange = (int) Math.abs((ncolordeviation / amountpercolor));//calculate the amount of times the color has to change
@@ -1193,17 +1193,19 @@ public class CellularAutomaton implements Serializable{
 						g.setColor(paintcolor);
 						g.fillRect(xcoordinate, ycoordinate, sizesquaresfill, sizesquaresfill);
 					}else {
-						g.setColor(Color.black);
+						g.setColor(Color.white);
 						g.fillRect(xcoordinate, ycoordinate, sizesquaresfill, sizesquaresfill);
 					}
           
-          if(selectedresource instanceof local_resource){
+          if(regenerate > 0){
+            if(selectedresource instanceof local_resource){
               local_resource selected_local_resource = (local_resource) selectedresource;
               int sourcecell = selected_local_resource.issourceinlist(item);
               if(sourcecell == 1){
-                g.setColor(Color.white);
+                g.setColor(Color.black);
                 g.fillRect(xcoordinate, ycoordinate, sizesquaresfill, sizesquaresfill);
               }
+            }
           }
 					
 					xcoordinate = xcoordinate + sizesquares;
