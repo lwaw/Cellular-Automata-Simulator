@@ -878,8 +878,12 @@ public class CellularAutomaton implements Serializable{
           }else if("resource".equals(lastselectedobject)){//add local resource source when clicked on grid
             if(selectedresource instanceof local_resource) {
               local_resource selectedresource_local = (local_resource) selectedresource;
+              int amountpercell = selectedresource.getamountpercel();
+              int resourceid = selectedresource.getresourceid() - 1;
               cell cellobject = cells[cellnumber];
+              
               selectedresource_local.addremovesource(cellobject);
+              cellobject.setselectedresource(resourceid, amountpercell);
             }
               
           }
@@ -1158,10 +1162,18 @@ public class CellularAutomaton implements Serializable{
 					Color resourcecolor = selectedresource.getresourcecolor();
 					int resourceid = selectedresource.getresourceid();
 					resourceid--;//array starts with 0
+          int regenerate = selectedresource.getregenerate();
 					
 					//calculate the intervals for each color
 					int halfamountpercell = (int) (amountpercell / 2);
 					int amountpercolor = amountpercell / 10;
+          
+          //different colors if no regeneration because maxamount will be different
+          if(regenerate == 0){
+              amountpercolor = (int) amountpercell / (gridsize * gridsize);
+              if(amountpercolor < 1){ amountpercolor = 1; }//minimum steps of 1
+              halfamountpercell = (int) 5 * amountpercolor;
+          }
 					
 					resourceavailable = item.getselectedresource(resourceid);//get resource amount
 					
