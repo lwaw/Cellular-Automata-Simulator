@@ -1501,7 +1501,7 @@ public class CellularAutomaton implements Serializable{
             
 					JLabel amountnumberlabel = new JLabel("amount available per cel: ");
 					panelsouth_east.add(amountnumberlabel);
-					amountnumberfield = new JFormattedTextField(getMaskFormatter("##"));
+					amountnumberfield = new JFormattedTextField(getMaskFormatter("###"));
 					panelsouth_east.add(amountnumberfield);
           
           JLabel diffusionlabel = new JLabel("diffusion of resource: 0,1");
@@ -1511,7 +1511,7 @@ public class CellularAutomaton implements Serializable{
 					
 					JLabel regeneratenumberlabel = new JLabel("regenerate: ");
 					panelsouth_east.add(regeneratenumberlabel);
-					regeneratenumberfield = new JFormattedTextField(getMaskFormatter("##"));
+					regeneratenumberfield = new JFormattedTextField(getMaskFormatter("###"));
 					panelsouth_east.add(regeneratenumberfield);
 					
 					JButton addresource = new JButton("add resource");
