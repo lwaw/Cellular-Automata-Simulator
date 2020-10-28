@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class resource implements Serializable{
 	int resourceid, amountpercel = 0, regenerate = 0, diffusion = 0;
+  double diffusionparameter = 0.5;
 	Color color;
 	
 	public int getamountpercel() {
@@ -12,6 +13,14 @@ public class resource implements Serializable{
 	
 	public void setamountpercel(int value) {
 		amountpercel = value;
+	}
+  
+	public double getdiffusionparameter() {
+		return diffusionparameter;
+	}
+	
+	public void setdiffusionparameter(double value) {
+		diffusionparameter = value;
 	}
 	
 	public int getregenerate() {

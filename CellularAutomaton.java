@@ -26,7 +26,7 @@ public class CellularAutomaton implements Serializable{
 	boolean onlypaint = false;
 	boolean synchronous = true;
 	boolean diffusion = false;
-	JFormattedTextField growthratefield, densitydependentdeathfield, backgrounddeathratefield, replicaterequirednumberfield, minimumrequirednumberfield,amountnumberfield,regeneratenumberfield, diffusionnumberfield, mutationnumberfield, mutationspeedlabelnumberfield, incubationnumberfield, lethalityfield;
+	JFormattedTextField growthratefield, densitydependentdeathfield, backgrounddeathratefield, replicaterequirednumberfield, minimumrequirednumberfield,amountnumberfield,regeneratenumberfield, diffusionnumberfield, mutationnumberfield, mutationspeedlabelnumberfield, incubationnumberfield, lethalityfield, diffusionparameternumberfield;
 	JTextField preyfield, resourcefield, resourceproducefield, evospeciesfield, cooperatefield, gridsizefield, infectfield;
 	String selection, selection2, selection3;
 	JPanel panelsouth, panelnorth, panelsouth_east, panelwest, panelwestcontainer,panelsouthcontainer;
@@ -84,28 +84,28 @@ public class CellularAutomaton implements Serializable{
           ArrayList<Integer> numberofcellslist = new ArrayList<Integer>();
           ArrayList<cell> randomnumberofcellslist = new ArrayList<cell>();
 
+          //create list of random cell order and update all cells in this order
+          int x = 0;
+          int numberofcells = cells.length;
+
+          //create list with cell numbers
+          while(x < numberofcells){
+            numberofcellslist.add(x);
+            x++;
+          }
+
+          x = 0;
+          while(numberofcellslist.size() > 0){
+            int randomNumberindex = r.nextInt(numberofcellslist.size()); 
+            int randomNumber = numberofcellslist.get(randomNumberindex);
+
+            randomnumberofcellslist.add(cells[randomNumber]);
+            numberofcellslist.remove(randomNumberindex);
+
+            x++;
+          }
+          
           if(synchronous == false){
-            //create list of random cell order and update all cells in this order
-            int x = 0;
-            int numberofcells = cells.length;
-
-            //create list with cell numbers
-            while(x < numberofcells){
-              numberofcellslist.add(x);
-              x++;
-            }
-
-            x = 0;
-            while(numberofcellslist.size() > 0){
-              int randomNumberindex = r.nextInt(numberofcellslist.size()); 
-              int randomNumber = numberofcellslist.get(randomNumberindex);
-
-              randomnumberofcellslist.add(cells[randomNumber]);
-              numberofcellslist.remove(randomNumberindex);
-
-              x++;
-            }
-
             x = 0;
             for(cell y : randomnumberofcellslist){
               xlocation = y.getxlocation();
@@ -171,7 +171,7 @@ public class CellularAutomaton implements Serializable{
 	    		//regenerate resource synchronous
 	    		if(synchronous == true) {
             i = 0;
-	    			for(cell item : cells) {
+	    			for(cell item : randomnumberofcellslist) {//always asynchronous update resource
               xlocation = item.getxlocation();
               ylocation = item.getylocation();
               getcellnumber = ( gridsize * ylocation ) + xlocation;
@@ -350,11 +350,11 @@ public class CellularAutomaton implements Serializable{
 		
 		if(arraysize != 0 || rarraysize != 0) {
 			int speciesid, resourceid, resourceregenerate, resourcediffusion, evolutionspecies, incubationtime;
-			double speciesgrowthrate, speciesdensitydependentdeathe, speciesbackgroundbackgrounddeathrate, evolutionmutation, evolutionmutationspeed, lethality;
+			double speciesgrowthrate, speciesdensitydependentdeathe, speciesbackgroundbackgrounddeathrate, evolutionmutation, evolutionmutationspeed, lethality, resourcediffusionparameter;
 			String evolutionparameter;
 			Color speciescolor, resourcecolor, evolutioncolor;
 			int labelarraysize = arraysize*5;//number of labels per species
-			int rlabelarraysize = rarraysize*4;//number of labels per resource
+			int rlabelarraysize = rarraysize*5;//number of labels per resource
 			int elabelarraysize = earraysize*4;//number of labels per evolution
 				
 			//reset panel to redraw
@@ -461,6 +461,13 @@ public class CellularAutomaton implements Serializable{
               }else{
                   rlabelarray[i].setText("diffusion: FALSE");
               }
+			        rlabelarray[i].setForeground(resourcecolor);
+			        rpanelarray[j].add(rlabelarray[i]);
+			        i++;
+              
+			        rlabelarray[i] = new JLabel();
+			        resourcediffusionparameter = s.getdiffusionparameter();
+			        rlabelarray[i].setText("diffusion parameter: " + resourcediffusionparameter);
 			        rlabelarray[i].setForeground(resourcecolor);
 			        rpanelarray[j].add(rlabelarray[i]);
 			        i++;
@@ -1518,10 +1525,15 @@ public class CellularAutomaton implements Serializable{
 					amountnumberfield = new JFormattedTextField(getMaskFormatter("###"));
 					panelsouth_east.add(amountnumberfield);
           
-          JLabel diffusionlabel = new JLabel("diffusion of resource: 0,1");
+          JLabel diffusionlabel = new JLabel("diffusion of resource 0,1");
 					panelsouth_east.add(diffusionlabel);
 					diffusionnumberfield = new JFormattedTextField(getMaskFormatter("#"));
 					panelsouth_east.add(diffusionnumberfield);
+          
+					JLabel diffusionparameterlabel = new JLabel("diffusion parameter: ");
+					panelsouth_east.add(diffusionparameterlabel);
+					diffusionparameternumberfield = new JFormattedTextField(getMaskFormatter("0.##"));
+					panelsouth_east.add(diffusionparameternumberfield);
 					
 					JLabel regeneratenumberlabel = new JLabel("regenerate: ");
 					panelsouth_east.add(regeneratenumberlabel);
@@ -1969,6 +1981,7 @@ public class CellularAutomaton implements Serializable{
         int regeneratenumberint = (int) regeneratenumber;//convert to int
         double diffusionnumber = (double) Double.valueOf(diffusionnumberfield.getText());
         int diffusionnumberint = (int) diffusionnumber;//convert to int
+        double diffusionparameter = (double) Double.valueOf(diffusionparameternumberfield.getText());
         
         resource newresource = new resource();
         if("global resource".equals(selection3)) {
@@ -1991,6 +2004,9 @@ public class CellularAutomaton implements Serializable{
         newresource.setamountpercel(amountnumberint);
         newresource.setregenerate(regeneratenumberint);
         newresource.setresourceid(resourcecounter);
+        if(diffusionparameter != 0){
+            newresource.setdiffusionparameter(diffusionparameter);
+        }
         resourcecounter++;
         newresource.setresourcecolor();
         resourcearraylist.add(newresource);

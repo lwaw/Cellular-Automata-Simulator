@@ -185,7 +185,7 @@ public class cell implements Serializable{
     if(lowestvalueindex >= 0 && lowestvalue >= 0){
       if(currcell_resourceamount > lowestvalue){
           //diffusion bases on difference in value between two cells
-          double diffusionparameter = 0.5;
+          double diffusionparameter = r.getdiffusionparameter();
           int resourcediff = currcell_resourceamount - lowestvalue;
           double resourcechange = resourcediff * diffusionparameter;
           int resourcechangerounded = (int) Math.round(resourcechange);
