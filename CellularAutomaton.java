@@ -2458,7 +2458,11 @@ public class CellularAutomaton implements Serializable{
 									if(item instanceof resource) {
 										resource r = (resource) item;
 										int amountpercell = r.getamountpercel();
-										tempcells[i].setresourceavailable(amountpercell);
+                    if(r instanceof global_resource){
+                      tempcells[i].setresourceavailable(amountpercell);
+                    }else{
+                        tempcells[i].setresourceavailable(0);
+                    }
 									}
 								}
 							}
