@@ -24,7 +24,7 @@ public class CellularAutomaton implements Serializable{
 	boolean boolrun = false;
 	boolean onesteprun = false;
 	boolean onlypaint = false;
-	boolean synchronous = true;
+	boolean synchronous = false;
 	boolean diffusion = false;
 	JFormattedTextField growthratefield, densitydependentdeathfield, backgrounddeathratefield, replicaterequirednumberfield, minimumrequirednumberfield,amountnumberfield,regeneratenumberfield, diffusionnumberfield, mutationnumberfield, mutationspeedlabelnumberfield, incubationnumberfield, lethalityfield, diffusionparameternumberfield;
 	JTextField preyfield, resourcefield, resourceproducefield, evospeciesfield, cooperatefield, gridsizefield, infectfield;
@@ -266,7 +266,7 @@ public class CellularAutomaton implements Serializable{
 		newspeciesbutton.addActionListener(new newspecieslistener());
 		panelsouth.add(newspeciesbutton);
 		
-		synchronousbutton = new JButton("update asynchronous");
+		synchronousbutton = new JButton("update synchronous");
 		synchronousbutton.addActionListener(new synchronouslistener());
 		panelsouth.add(synchronousbutton);
 		
