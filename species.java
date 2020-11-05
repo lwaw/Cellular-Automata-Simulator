@@ -439,7 +439,6 @@ class predator extends species{
     	        				
     	        				if(evolutionspecies == speciesid) {
     	        					if( "resourceproduction".equals(parameter)) {
-    	        						//System.out.println("currcell" + currcell);
     	        						individualresourceproduction = e.getparameterincell(currcell);
     	        					}
     	        				}
@@ -447,9 +446,7 @@ class predator extends species{
     	        		}
     	        		
     	        		randresourceproduction = Math.random();
-    	        		//System.out.println("randresourceproduction" + randresourceproduction + " " + individualresourceproduction);
     	        		if(randresourceproduction <= individualresourceproduction) {
-    	        			//System.out.println("test");
 	    	        		int resourceproduced = resourceproduceamountlist.get(j);
 	    	        		int resourceleft = (int) resourcepercell + resourceproduced;
 	    	        		
@@ -686,7 +683,6 @@ class cooperator extends species{
     	        				
     	        				if(evolutionspecies == speciesid) {
     	        					if( "resourceproduction".equals(parameter)) {
-    	        						//System.out.println("currcell" + currcell);
     	        						individualresourceproduction = e.getparameterincell(currcell);
     	        					}
     	        				}
@@ -694,9 +690,7 @@ class cooperator extends species{
     	        		}
     	        		
     	        		randresourceproduction = Math.random();
-    	        		//System.out.println("randresourceproduction" + randresourceproduction + " " + individualresourceproduction);
     	        		if(randresourceproduction <= individualresourceproduction) {
-    	        			//System.out.println("test");
 	    	        		int resourceproduced = resourceproduceamountlist.get(j);
 	    	        		int resourceleft = (int) resourcepercell + resourceproduced;
 	    	        		
@@ -744,9 +738,7 @@ class gameoflife extends species{
     	        for(Object resourcepercell : resourceavailable) {//resource per cell
     	        	if(i == (int) resourceid) {//if id == at the same position as resource in arraylist
     	        		int resourcerequired = resourceconsumptionlist.get(j);
-    	        		int resourceleft = (int) resourcepercell - resourcerequired;
-    	        		//System.out.println(resourceleft + " , " + resourcepercell + " , " + resourcerequired);
-    	        		
+    	        		int resourceleft = (int) resourcepercell - resourcerequired;    	        		
     	        		if(resourceleft < 0) {//no resource left
     	        			replicaterate = 0;
     	        			resourceleft = 0;

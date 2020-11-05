@@ -225,11 +225,8 @@ public class cell implements Serializable{
 			
 			int i = 0;
 			for(Object v : virusincelltemp) {
-			//for(Iterator<Object> v = virusincell.iterator(); v.hasNext();) {
 				if(v instanceof virus) {
-					virus vir = (virus) v;
-					//setevolution(evolutionarraylist, currcell, currcell, vir);//mutate all viruses in cell
-					
+					virus vir = (virus) v;					
 					int incubationtime = virusincellincubationtime.get(i);
 					incubationtime--;
 					if(incubationtime > 0) {//incubation time until virus starts spreading
@@ -309,21 +306,21 @@ public class cell implements Serializable{
 							c++;
 						}
 						
-    		        	if(evolutionarraylist.size() != 0) {//check for evolution in lethality
-    		        		for(Object evo : evolutionarraylist) {
-    		        			if(evo instanceof evolution) {
-    		        				evolution e = (evolution) evo;
-    		        				int evolutionspecies = e.getevospecies();
-    		        				String parameter = e.getparameter();
-    		        				
-    		        				if(evolutionspecies == virusspecies) {
-    		        					if( "lethality".equals(parameter)) {
-    		        						viruslethality = e.getparameterincell(currcell);
-    		        					}
-    		        				}
-    		        			}
-    		        		}
-    		        	}
+            if(evolutionarraylist.size() != 0) {//check for evolution in lethality
+              for(Object evo : evolutionarraylist) {
+                if(evo instanceof evolution) {
+                  evolution e = (evolution) evo;
+                  int evolutionspecies = e.getevospecies();
+                  String parameter = e.getparameter();
+
+                  if(evolutionspecies == virusspecies) {
+                    if( "lethality".equals(parameter)) {
+                      viruslethality = e.getparameterincell(currcell);
+                    }
+                  }
+                }
+              }
+            }
 					}else if(incubationtime <= 0) {//spread virus and cell has chance to die
 						double viruslethality = vir.getlethality();
 						ArrayList<Integer> infectionlist = vir.getinfecting();
@@ -398,21 +395,21 @@ public class cell implements Serializable{
 							c++;
 						}
 						
-    		        	if(evolutionarraylist.size() != 0) {//check for evolution in lethality
-    		        		for(Object evo : evolutionarraylist) {
-    		        			if(evo instanceof evolution) {
-    		        				evolution e = (evolution) evo;
-    		        				int evolutionspecies = e.getevospecies();
-    		        				String parameter = e.getparameter();
-    		        				
-    		        				if(evolutionspecies == virusspecies) {
-    		        					if( "lethality".equals(parameter)) {
-    		        						viruslethality = e.getparameterincell(currcell);
-    		        					}
-    		        				}
-    		        			}
-    		        		}
-    		        	}
+            if(evolutionarraylist.size() != 0) {//check for evolution in lethality
+              for(Object evo : evolutionarraylist) {
+                if(evo instanceof evolution) {
+                  evolution e = (evolution) evo;
+                  int evolutionspecies = e.getevospecies();
+                  String parameter = e.getparameter();
+
+                  if(evolutionspecies == virusspecies) {
+                    if( "lethality".equals(parameter)) {
+                      viruslethality = e.getparameterincell(currcell);
+                    }
+                  }
+                }
+              }
+            }
                         
 						double rand = Math.random();
 						if(rand < viruslethality) {//cell dies because of virus
@@ -424,20 +421,20 @@ public class cell implements Serializable{
 							virusincell.remove(i);
 							virusincellincubationtime.remove(i);
 							
-	    		        	if(evolutionarraylist.size() != 0) {//check for evolution in parameters if dead then set to 0.0
-	    		        		for(Object evo : evolutionarraylist) {
-	    		        			if(evo instanceof evolution) {
-	    		        				evolution e = (evolution) evo;
-	    		        				int evolutionspecies = e.getevospecies();
-	    		        				String parameter = e.getparameter();
-	    		        				
-	    		        				if(evolutionspecies == virusspecies) {
-	    		        					e.setparameterupdate(i, 0.0);
-	    		        				}
-	    		        			}
-	    		        		}
-	    		        	}
-	    		        	i--;//to get good index
+              if(evolutionarraylist.size() != 0) {//check for evolution in parameters if dead then set to 0.0
+                for(Object evo : evolutionarraylist) {
+                  if(evo instanceof evolution) {
+                    evolution e = (evolution) evo;
+                    int evolutionspecies = e.getevospecies();
+                    String parameter = e.getparameter();
+
+                    if(evolutionspecies == virusspecies) {
+                      e.setparameterupdate(i, 0.0);
+                    }
+                  }
+                }
+              }
+              i--;//to get good index
 						}
 					}
 				}
@@ -449,25 +446,17 @@ public class cell implements Serializable{
 			double deathrate = 0;
 			double replicaterate = 0;
 		    if (speciesvalue instanceof grower) {
-		        grower s = (grower) speciesvalue;
+		      grower s = (grower) speciesvalue;
 		    	deathrate = s.death(neighbourvaluessarraylist, cells, currcell, speciesvalue, resourceavailable, evolutionarraylist);
-		    	
-		    	//setevolution(evolutionarraylist, currcell, currcell, s);
 		    }else if(speciesvalue instanceof predator){
 		    	predator s = (predator) speciesvalue;
 		    	deathrate = s.death(neighbourvaluessarraylist, cells, currcell, speciesvalue, resourceavailable, evolutionarraylist);
-		    	
-		    	//setevolution(evolutionarraylist, currcell, currcell, s);
 		    }else if(speciesvalue instanceof cooperator){
 		    	cooperator s = (cooperator) speciesvalue;
 		    	deathrate = s.death(neighbourvaluessarraylist, cells, currcell, speciesvalue, resourceavailable, evolutionarraylist);
-		    	
-		    	//setevolution(evolutionarraylist, currcell, currcell, s);
 		    }else if(speciesvalue instanceof gameoflife){
 		    	gameoflife s = (gameoflife) speciesvalue;
 		    	deathrate = s.death(neighbourvaluessarraylist, cells, currcell, speciesvalue, resourceavailable);
-		    	
-		    	//setevolution(evolutionarraylist, currcell, currcell, s);
 		    }
 		    
 		    double deathrand = Math.random();
@@ -478,38 +467,38 @@ public class cell implements Serializable{
 	        	return null;
 	        }else {//still alive
 	        	int i = 0;
-				for (Object o : neighbourvaluessarraylist) {//for every neighbour check chance to get predated on
-				    if (o instanceof predator) {
-				    	predator s = (predator) o;
-				    	replicaterate = s.replicate(neighbourvaluessarraylist, cells, currcell, speciesvalue, resourceavailable, evolutionarraylist, neighbourcellsarray[i]);
-				    	
-				    	double replicaterand = Math.random();
-				    	if(replicaterand < replicaterate) {//cell is being predated on
-				        	removevirusincell();//remove virus from cell
-				        	removevincubationtime();
-				        	
-	    		        	if(evolutionarraylist.size() != 0) {//check for evolution in parameters if then set all to 0.0
-	    		        		for(Object evo : evolutionarraylist) {
-	    		        			if(evo instanceof evolution) {
-	    		        				evolution e = (evolution) evo;
-	    		        				int evolutionspecies = e.getevospecies();
-	    		        				String parameter = e.getparameter();
-	    		        				
-	    		        				e.setparameterupdate(currcell, 0.0);
-	    		        			}
-	    		        		}
-	    		        	}
-	    		        	
-	    		        	setevolution(evolutionarraylist, currcell, neighbourcellsarray[i], s);//set new evolutionparameter for predator
-				        	
-				    		return s;//cell has new value
-				    	}
-				    }
-				    i++;
-				}
+            for (Object o : neighbourvaluessarraylist) {//for every neighbour check chance to get predated on
+                if (o instanceof predator) {
+                  predator s = (predator) o;
+                  replicaterate = s.replicate(neighbourvaluessarraylist, cells, currcell, speciesvalue, resourceavailable, evolutionarraylist, neighbourcellsarray[i]);
+
+                  double replicaterand = Math.random();
+                  if(replicaterand < replicaterate) {//cell is being predated on
+                    removevirusincell();//remove virus from cell
+                    removevincubationtime();
+
+                    if(evolutionarraylist.size() != 0) {//check for evolution in parameters if then set all to 0.0
+                      for(Object evo : evolutionarraylist) {
+                        if(evo instanceof evolution) {
+                          evolution e = (evolution) evo;
+                          int evolutionspecies = e.getevospecies();
+                          String parameter = e.getparameter();
+
+                          e.setparameterupdate(currcell, 0.0);
+                        }
+                      }
+                    }
+
+                    setevolution(evolutionarraylist, currcell, neighbourcellsarray[i], s);//set new evolutionparameter for predator
+
+                    return s;//cell has new value
+                  }
+                }
+                i++;
+            }
 				
 	        	return cells[currcell].getspeciesvalue();
-	        }
+	      }
 	        
 		}else {//if cell is empty search for neighbours to replicate
 			int i = 0;
