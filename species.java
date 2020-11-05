@@ -156,81 +156,7 @@ class grower extends species{
         if(replicaterequirednumber <= ownspecies) {//needed number of own neighbouring cells
         	replicaterate = growthrateindividual;
         }
-        
-        /*
-        if(resourcearraylist.size() > 0) {//check if resource is still available
-        	for(Integer resourceid : resourcearraylist) {//resource ids
-        		resourceid--;//resourcarraylist starts from 1 and resourceavailable/i starts from 0
-        		int i = 0, j = 0;//resource resourceavailable can be longer than resourceconsumptionlist
         		
-    	        for(Object resourcepercell : resourceavailable) {//resource per cell
-    	        	if(i == (int) resourceid) {//if id == at the same position as resource in arraylist
-    	        		int resourcerequired = resourceconsumptionlist.get(j);
-    	        		int resourceleft = (int) resourcepercell - resourcerequired;
-    	        		
-    	        		if(resourceleft < 0) {//no resource left
-    	        			replicaterate = 0;
-    	        			resourceleft = 0;
-    	        			
-    	        			cells[currcell].updateresource(resourceid, resourceleft);//update resource
-    	        		}else {
-    	        			cells[currcell].updateresource(resourceid, resourceleft);//update resource
-    	        		}
-    	        	}
-    	        	i++;
-    	        }
-    	        j++;
-        	}
-        }
-        */
-        /*
-        if(resourceproduceidarraylist.size() > 0) {
-        	double randresourceproduction;
-        	double individualresourceproduction = resourcechance;
-        	for(Integer resourceid : resourceproduceidarraylist) {//resource ids
-        		resourceid--;//resourcarraylist starts from 1 and resourceavailable/i starts from 0
-        		int i = 0, j = 0;//resource resourceavailable can be longer than resourceconsumptionlist
-        		
-    	        for(Object resourcepercell : resourceavailable) {//resource per cell
-    	        	if(i == (int) resourceid) {//if id == at the same position as resource in arraylist
-    	        		individualresourceproduction = resourcechance;
-    	        		
-    	        		for (Object o : evolutionarraylist) {//check for evolution resource prduction parameter; if no evolution take normal densitydependentdeath
-    	        			if(o instanceof evolution) {
-    	        				evolution e = (evolution) o;
-    	        				int evolutionspecies = e.getevospecies();
-    	        				String parameter = e.getparameter();
-    	        				
-    	        				if(evolutionspecies == speciesid) {
-    	        					if(parameter == "resourceproduction") {
-    	        						//System.out.println("currcell" + currcell);
-    	        						individualresourceproduction = e.getparameterincell(currcell);
-    	        					}
-    	        				}
-    	        			}
-    	        		}
-    	        		
-    	        		randresourceproduction = Math.random();
-    	        		//System.out.println("randresourceproduction" + randresourceproduction + " " + individualresourceproduction);
-    	        		if(randresourceproduction <= individualresourceproduction) {
-    	        			//System.out.println("test");
-	    	        		int resourceproduced = resourceproduceamountlist.get(j);
-	    	        		int resourceleft = (int) resourcepercell + resourceproduced;
-	    	        		
-	    	        		if(resourceleft > 0) {//no resource left
-	    	        			cells[currcell].updateresource(resourceid, resourceleft);//update resource
-	    	        		}else {
-	    	        			
-	    	        		}
-    	        		}
-    	        	}
-    	        	i++;
-    	        }
-    	        j++;
-        	}
-        }
-        */
-		
 		return replicaterate;
 	}
 	
@@ -415,75 +341,7 @@ class predator extends species{
 	        	replicaterate = growthrateindividual;
 	        }
 		}
-		/*
-        if(resourcearraylist.size() > 0) {//check if resource is still available
-        	for(Integer resourceid : resourcearraylist) {//resource ids
-        		resourceid--;//resourcarraylist starts from 1 and resourceavailable/i starts from 0
-        		int i = 0, j = 0;//resource resourceavailable can be longer than resourceconsumptionlist
-        		
-    	        for(Object resourcepercell : resourceavailable) {//resource per cell
-    	        	if(i == (int) resourceid) {//if id == at the same position as resource in arraylist
-    	        		int resourcerequired = resourceconsumptionlist.get(j);
-    	        		int resourceleft = (int) resourcepercell - resourcerequired;
-    	        		
-    	        		if(resourceleft < 0) {//no resource left
-    	        			replicaterate = 0;
-    	        			resourceleft = 0;
-    	        			
-    	        			cells[currcell].updateresource(resourceid, resourceleft);//update resource
-    	        		}else {
-    	        			cells[currcell].updateresource(resourceid, resourceleft);//update resource
-    	        		}
-    	        	}
-    	        	i++;
-    	        }
-    	        j++;
-        	}
-        }
-        
-        if(resourceproduceidarraylist.size() > 0) {
-        	double randresourceproduction;
-        	double individualresourceproduction = resourcechance;
-        	for(Integer resourceid : resourceproduceidarraylist) {//resource ids
-        		resourceid--;//resourcarraylist starts from 1 and resourceavailable/i starts from 0
-        		int i = 0, j = 0;//resource resourceavailable can be longer than resourceconsumptionlist
-        		
-    	        for(Object resourcepercell : resourceavailable) {//resource per cell
-    	        	if(i == (int) resourceid) {//if id == at the same position as resource in arraylist
-    	        		individualresourceproduction = resourcechance;
-    	        		
-    	        		for (Object o : evolutionarraylist) {//check for evolution resource prduction parameter; if no evolution take normal densitydependentdeath
-    	        			if(o instanceof evolution) {
-    	        				evolution e = (evolution) o;
-    	        				int evolutionspecies = e.getevospecies();
-    	        				String parameter = e.getparameter();
-    	        				
-    	        				if(evolutionspecies == speciesid) {
-    	        					if(parameter == "resourceproduction") {
-    	        						individualresourceproduction = e.getparameterincell(currcell);
-    	        					}
-    	        				}
-    	        			}
-    	        		}
-    	        		
-    	        		randresourceproduction = Math.random();
-    	        		if(randresourceproduction <= individualresourceproduction) {
-	    	        		int resourceproduced = resourceproduceamountlist.get(j);
-	    	        		int resourceleft = (int) resourcepercell + resourceproduced;
-	    	        		
-	    	        		if(resourceleft > 0) {//no resource left
-	    	        			cells[currcell].updateresource(resourceid, resourceleft);//update resource
-	    	        		}else {
-	    	        			
-	    	        		}
-    	        		}
-    	        	}
-    	        	i++;
-    	        }
-    	        j++;
-        	}
-        }
-        */
+
 		if(checkevolutionparameter == 1) {//if evoution on parameter value is added, check for difference between species
 			double evolvingparameterdiff = Math.abs(evolvingparameterneighbour-evolvingparameterown);
 			
@@ -730,75 +588,7 @@ class cooperator extends species{
 				}
 			}
 		}
-		/*
-        if(resourcearraylist.size() > 0) {//check if resource is still available
-        	for(Integer resourceid : resourcearraylist) {//resource ids
-        		resourceid--;//resourcarraylist starts from 1 and resourceavailable/i starts from 0
-        		int i = 0, j = 0;//resource resourceavailable can be longer than resourceconsumptionlist
-        		
-    	        for(Object resourcepercell : resourceavailable) {//resource per cell
-    	        	if(i == (int) resourceid) {//if id == at the same position as resource in arraylist
-    	        		int resourcerequired = resourceconsumptionlist.get(j);
-    	        		
-    	        		int resourceleft = (int) resourcepercell - resourcerequired;
-    	        		
-    	        		if(resourceleft < 0) {//no resource left
-    	        			replicaterate = 0;
-    	        			resourceleft = 0;
-    	        			
-    	        			cells[currcell].updateresource(resourceid, resourceleft);//update resource
-    	        		}else {
-    	        			cells[currcell].updateresource(resourceid, resourceleft);//update resource
-    	        		}
-    	        	}
-    	        	i++;
-    	        }
-    	        j++;
-        	}
-        }
-        
-        if(resourceproduceidarraylist.size() > 0) {
-        	double randresourceproduction;
-        	double individualresourceproduction = resourcechance;
-        	for(Integer resourceid : resourceproduceidarraylist) {//resource ids
-        		resourceid--;//resourcarraylist starts from 1 and resourceavailable/i starts from 0
-        		int i = 0, j = 0;//resource resourceavailable can be longer than resourceconsumptionlist
-        		individualresourceproduction = resourcechance;
-        		
-        		for (Object o : evolutionarraylist) {//check for evolution resource prduction parameter; if no evolution take normal densitydependentdeath
-        			if(o instanceof evolution) {
-        				evolution e = (evolution) o;
-        				int evolutionspecies = e.getevospecies();
-        				String parameter = e.getparameter();
-        				
-        				if(evolutionspecies == speciesid) {
-        					if(parameter == "resourceproduction") {
-        						individualresourceproduction = e.getparameterincell(currcell);
-        					}
-        				}
-        			}
-        		}
-        		
-        		randresourceproduction = Math.random();
-        		if(randresourceproduction <= individualresourceproduction) {
-	    	        for(Object resourcepercell : resourceavailable) {//resource per cell
-	    	        	if(i == (int) resourceid) {//if id == at the same position as resource in arraylist
-	    	        		int resourceproduced = resourceproduceamountlist.get(j);
-	    	        		int resourceleft = (int) resourcepercell + resourceproduced;
-	    	        		
-	    	        		if(resourceleft > 0) {//no resource left
-	    	        			cells[currcell].updateresource(resourceid, resourceleft);//update resource
-	    	        		}else {
-	    	        			
-	    	        		}
-	    	        	}
-	    	        	i++;
-	    	        }
-        		}
-    	        j++;
-        	}
-        }
-        */
+
 		if(checkevolutionparameter == 1) {//if evoution on parameter value is added, check for difference between species
 			double evolvingparameterdiff = Math.abs(evolvingparameterneighbour-evolvingparameterown);
 			
