@@ -24,7 +24,7 @@ public class CellularAutomaton implements Serializable{
 	boolean boolrun = false;
 	boolean onesteprun = false;
 	boolean onlypaint = false;
-	boolean synchronous = false;
+	boolean synchronous = true;
 	boolean diffusion = false;
 	JFormattedTextField growthratefield, densitydependentdeathfield, backgrounddeathratefield, replicaterequirednumberfield, minimumrequirednumberfield,amountnumberfield,regeneratenumberfield, diffusionnumberfield, mutationnumberfield, mutationspeedlabelnumberfield, incubationnumberfield, lethalityfield, diffusionparameternumberfield;
 	JTextField preyfield, resourcefield, resourceproducefield, evospeciesfield, cooperatefield, gridsizefield, infectfield;
@@ -116,40 +116,65 @@ public class CellularAutomaton implements Serializable{
               y.setspeciesvalue(s);
 
               y.regenerateresource(resourcearraylist, gridsize, cells, getcellnumber, xlocation, ylocation);//regenerate resources asynchronous
-
+              
+              if(s == null){
+                y.removevincubationtime();//if not remove again virusses could spread while cell is already dead in synchronous updates
+	    			   	y.removevirusincell();
+                
+	    		     	if(evolutionarraylist.size() != 0) {//check for evolution in parameters if dead then set to 0.0
+	    		     		for(Object evo : evolutionarraylist) {
+	    		     			if(evo instanceof evolution) {
+	    		     				evolution e = (evolution) evo;
+	    		     				int evolutionspecies = e.getevospecies();
+	    		     				String parameter = e.getparameter();
+	    		        				
+	    		     				e.setparameterupdate(getcellnumber, 0.0);
+	    		     			}
+	    		     		}
+	    		     	}
+              }
+              
               x++;
             }
           }else{
             //check for updates in each cell; synchronous update draws all changes at the end of each cycle once while asynchronous draws on the go
-            for(cell item : cells) {
-              species s = item.updatecells(gridsize, cells, i, evolutionarraylist, diffusion);//update cells user cells & i array to find neighbours
+            for(cell item : randomnumberofcellslist) {
+              xlocation = item.getxlocation();
+              ylocation = item.getylocation();
+              getcellnumber = ( gridsize * ylocation ) + xlocation;
+                
+              species s = item.updatecells(gridsize, cells, getcellnumber, evolutionarraylist, diffusion);//update cells user cells & i array to find neighbours
               updatespeciesarraylist.add(s);
 
               i++;
             }
           }
 	    		
-	    		//after all cells are updated draw new updated values
+	    		//after all cells are updated draw new updated values for synchronous updating
 	    		i = 0;
 	    		if(synchronous == true) {
 	    			for(Object o : updatespeciesarraylist){
+              xlocation = randomnumberofcellslist.get(i).getxlocation();
+              ylocation = randomnumberofcellslist.get(i).getylocation();
+              getcellnumber = ( gridsize * ylocation ) + xlocation;
+                
 	    			  if (o instanceof grower) {
 	    			      grower s = (grower) o;
-	    			      cells[i].setspeciesvalue(s);
+	    			      randomnumberofcellslist.get(i).setspeciesvalue(s);
 	    			  }else if(o instanceof predator){
 	    			  	predator s = (predator) o;
-	    			  	cells[i].setspeciesvalue(s);
+	    			  	randomnumberofcellslist.get(i).setspeciesvalue(s);
 	    			  }else if(o instanceof cooperator){
 	    			  	cooperator s = (cooperator) o;
-	    			   	cells[i].setspeciesvalue(s);
+	    			   	randomnumberofcellslist.get(i).setspeciesvalue(s);
 	    			  }else if(o instanceof gameoflife){
 	    			   	gameoflife s = (gameoflife) o;
-	    			   	cells[i].setspeciesvalue(s);
+	    			   	randomnumberofcellslist.get(i).setspeciesvalue(s);
 	    			  }else if(o == null) {
-	    			   	cells[i].setspeciesvalue(null);
+	    			   	randomnumberofcellslist.get(i).setspeciesvalue(null);
 	    			   	
-	    			   	cells[i].removevincubationtime();//if not remove again virusses could spread while cell is already dead in synchronous updates
-	    			   	cells[i].removevirusincell();
+	    			   	randomnumberofcellslist.get(i).removevincubationtime();//if not remove again virusses could spread while cell is already dead in synchronous updates
+	    			   	randomnumberofcellslist.get(i).removevirusincell();
 	    			    	
 	    		     	if(evolutionarraylist.size() != 0) {//check for evolution in parameters if dead then set to 0.0
 	    		     		for(Object evo : evolutionarraylist) {
@@ -158,7 +183,7 @@ public class CellularAutomaton implements Serializable{
 	    		     				int evolutionspecies = e.getevospecies();
 	    		     				String parameter = e.getparameter();
 	    		        				
-	    		     				e.setparameterupdate(i, 0.0);
+	    		     				e.setparameterupdate(getcellnumber, 0.0);
 	    		     			}
 	    		     		}
 	    		     	}
@@ -171,7 +196,7 @@ public class CellularAutomaton implements Serializable{
 	    		//regenerate resource synchronous
 	    		if(synchronous == true) {
             i = 0;
-	    			for(cell item : randomnumberofcellslist) {//always asynchronous update resource
+	    			for(cell item : randomnumberofcellslist) {//always update resource in random order
               xlocation = item.getxlocation();
               ylocation = item.getylocation();
               getcellnumber = ( gridsize * ylocation ) + xlocation;
@@ -266,7 +291,7 @@ public class CellularAutomaton implements Serializable{
 		newspeciesbutton.addActionListener(new newspecieslistener());
 		panelsouth.add(newspeciesbutton);
 		
-		synchronousbutton = new JButton("update synchronous");
+		synchronousbutton = new JButton("update asynchronous");
 		synchronousbutton.addActionListener(new synchronouslistener());
 		panelsouth.add(synchronousbutton);
 		
