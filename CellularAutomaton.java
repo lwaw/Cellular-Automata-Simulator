@@ -537,7 +537,7 @@ public class CellularAutomaton implements Serializable{
 			        
 			        labelarray[i] = new JLabel();
 			        speciesdensitydependentdeathe = s.getspeciesdensitydependentdeathe();
-			        labelarray[i].setText("density dependent deathe: " + speciesdensitydependentdeathe);
+			        labelarray[i].setText("density dependent death: " + speciesdensitydependentdeathe);
 			        labelarray[i].setForeground(speciescolor);
 			        panelarray[j].add(labelarray[i]);
 			        i++;
@@ -584,7 +584,7 @@ public class CellularAutomaton implements Serializable{
 			        
 			        labelarray[i] = new JLabel();
 			        speciesdensitydependentdeathe = s.getspeciesdensitydependentdeathe();
-			        labelarray[i].setText("density dependent deathe: " + speciesdensitydependentdeathe);
+			        labelarray[i].setText("density dependent death: " + speciesdensitydependentdeathe);
 			        labelarray[i].setForeground(speciescolor);
 			        panelarray[j].add(labelarray[i]);
 			        i++;
@@ -644,7 +644,7 @@ public class CellularAutomaton implements Serializable{
 			        
 			        labelarray[i] = new JLabel();
 			        speciesdensitydependentdeathe = s.getspeciesdensitydependentdeathe();
-			        labelarray[i].setText("density dependent deathe: " + speciesdensitydependentdeathe);
+			        labelarray[i].setText("density dependent death: " + speciesdensitydependentdeathe);
 			        labelarray[i].setForeground(speciescolor);
 			        panelarray[j].add(labelarray[i]);
 			        i++;
@@ -703,7 +703,7 @@ public class CellularAutomaton implements Serializable{
 			        
 			        labelarray[i] = new JLabel();
 			        speciesdensitydependentdeathe = s.getspeciesdensitydependentdeathe();
-			        labelarray[i].setText("density dependent deathe: " + speciesdensitydependentdeathe);
+			        labelarray[i].setText("density dependent death: " + speciesdensitydependentdeathe);
 			        labelarray[i].setForeground(speciescolor);
 			        panelarray[j].add(labelarray[i]);
 			        i++;
@@ -749,7 +749,7 @@ public class CellularAutomaton implements Serializable{
 			        
 			        labelarray[i] = new JLabel();
 			        speciesdensitydependentdeathe = s.getspeciesdensitydependentdeathe();
-			        labelarray[i].setText("density dependent deathe: " + speciesdensitydependentdeathe);
+			        labelarray[i].setText("density dependent death: " + speciesdensitydependentdeathe);
 			        labelarray[i].setForeground(speciescolor);
 			        panelarray[j].add(labelarray[i]);
 			        i++;
